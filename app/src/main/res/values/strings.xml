@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">建销管家</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="home">日报</string>
+    <string name="day_statistics">日统计</string>
+    <string name="month_statistics">月统计</string>
+    <string name="personal">个人中心</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
