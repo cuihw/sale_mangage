@@ -40,7 +40,6 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.edit_password)
     EditText edit_password;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +50,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initListener() {
-        login_action.setOnClickListener(v->{
-            startLogin();
-        });
+        login_action.setOnClickListener(v -> startLogin());
     }
 
     private void startLogin() {
@@ -76,12 +73,14 @@ public class LoginActivity extends BaseActivity {
             public void onResponse(int status, LoginResult bean) {
                 ToastUtil.showTextToast(LoginActivity.this, bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE){
+                    bean.setUsername(username);
                     loginSucceed(bean);
                 } else {
                     HwLog.i(TAG, "request code: " + bean.getCode());
                 }
             }
         });
+        PreferencesUtils.putString(this, Constants.LOGIN_ADDRESS, Constants.LOGIN_URL);
     }
 
     private void loginSucceed(LoginResult bean) {
@@ -91,18 +90,12 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
-
     public static void startActivity(Context context, Bundle bundle) {
         Intent intent = new Intent(context, LoginActivity.class);
         if (bundle != null) {
             intent.putExtras(bundle);
         }
         context.startActivity(intent);
-    }
-
-    public static void clearLogin(Context context) {
-        PreferencesUtils.putBoolean(context,Constants.IS_LOGIN, false);
-        PreferencesUtils.putString(context,Constants.LOGIN_DATA, "");
     }
 
     @Override

@@ -1,9 +1,11 @@
 package com.zhongwang.sale;
 
 public class Constants {
+    public static final String LOGIN_ADDRESS = "loginAddress";
+    public static final String USERNAME = "username";
     // http://218.28.225.140
     // http://192.168.1.253
-    private static final String BASE_URL = "http://218.28.225.140/zwjxgj/index.php/app/";
+    private static final String BASE_URL = "http://192.168.1.253/zwjxgj/index.php/app/";
 
     public static String LOGIN_URL = BASE_URL + "user/login";
     public static String SALES_RECORD = BASE_URL + "SalesRecord/upDate";

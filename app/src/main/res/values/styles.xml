@@ -24,9 +24,8 @@
         <item name="android:backgroundDimEnabled">true</item>
     </style>
 
-
     <style name="MyTabLayoutTextAppearance">
-        <item name="android:textSize">@dimen/font3</item>
+        <item name="android:textSize">@dimen/font4</item>
         <item name="android:textColor">@color/font2</item>
     </style>
 </resources>

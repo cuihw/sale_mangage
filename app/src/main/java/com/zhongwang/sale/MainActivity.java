@@ -84,6 +84,13 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initData() {
+
+        String loginAddress = PreferencesUtils.getString(this, Constants.LOGIN_ADDRESS, "");
+        if (!Constants.LOGIN_URL.equals(loginAddress)) {
+            PreferencesUtils.putBoolean(this, Constants.IS_LOGIN, false);
+            LoginResult.clearLoginData(this);
+        }
+
         boolean isLogin = PreferencesUtils.getBoolean(this, Constants.IS_LOGIN, false);
         if (isLogin) {
             loginData = LoginResult.getLoginDataFromPreference(this);

@@ -14,4 +14,5 @@
     <dimen name="font8">11sp</dimen>
     <dimen name="font9">10sp</dimen>
     <dimen name="division">9sp</dimen>
+    <dimen name="item_padding">10dp</dimen>
 </resources>

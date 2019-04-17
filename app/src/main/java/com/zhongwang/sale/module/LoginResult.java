@@ -5,15 +5,23 @@ import android.text.TextUtils;
 
 import com.google.gson.Gson;
 import com.zhongwang.sale.Constants;
-import com.zhongwang.sale.activity.LoginActivity;
 import com.zhongwang.sale.utils.PreferencesUtils;
-import com.zhongwang.sale.utils.ToastUtil;
 
 import java.util.List;
 
 public class LoginResult extends Bean{
+    private String username;
 
-    List<GroundData> data;
+    private List<GroundData> data;
+
+    public static void clearLoginData(Context context) {
+        PreferencesUtils.putBoolean(context, Constants.IS_LOGIN, false);
+        PreferencesUtils.putString(context, Constants.LOGIN_DATA, "");
+    }
+
+    public String getUsername() {
+        return username;
+    }
 
     public List<GroundData> getData() {
         return data;
@@ -58,5 +66,9 @@ public class LoginResult extends Bean{
         } else {
             return fromJson(stringData);
         }
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
