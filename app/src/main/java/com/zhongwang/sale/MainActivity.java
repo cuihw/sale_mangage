@@ -1,12 +1,6 @@
 package com.zhongwang.sale;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.OnTabSelectListener;
@@ -62,11 +56,13 @@ public class MainActivity extends BaseActivity {
                         tranToFragment(fragmentDaily);
                         break;
                     case 1: // 日报查询
-
+                        tranToFragment(fragmentDayStatistic);
                         break;
                     case 2: // 月报
+                        tranToFragment(fragmentMonthStatistic);
                         break;
                     case 3: // 个人中心
+                        tranToFragment(fragmentPersonCenter);
                         break;
                     default: // 转到主页
                         tranToFragment(fragmentDaily);

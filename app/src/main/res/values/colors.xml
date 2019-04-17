@@ -22,6 +22,8 @@
     <!--淡灰色 -->
     <color name="Gainsboro">#DCDCDC</color>
 
+    <color name="white">#FFFFFF</color>
+
     <color name="black">#000000</color>
     <color name="color_7a7e83">#7a7e83</color>
     <color name="main_title">#26c08a</color>
@@ -31,4 +33,5 @@
     <color name="col_CDD1D6">#CDD1D6</color>
     <color name="red">#FF0000</color>
     <color name="z_dialog_bg_color">#FFFFFF</color>
+
 </resources>

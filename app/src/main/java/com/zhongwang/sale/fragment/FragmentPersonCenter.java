@@ -30,7 +30,7 @@ public class FragmentPersonCenter extends FragmentBase {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         HwLog.i(TAG, "onCreateView");
-        view  = inflater.inflate(R.layout.fragment_month_statistic, container, false);
+        view = inflater.inflate(R.layout.fragment_personal_center, container, false);
         bindButterKnife(view);
         return view;
     }
