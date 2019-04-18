@@ -29,7 +29,15 @@ public class LoginResult extends Bean{
     public static class GroundData {
         String id;
         String name;
+        String contract_price;
 
+        public String getContract_price() {
+            return contract_price;
+        }
+
+        public void setContract_price(String contract_price) {
+            this.contract_price = contract_price;
+        }
         public String getId() {
             return id;
         }

@@ -2,12 +2,10 @@ package com.zhongwang.sale.utils;
 
 import android.util.Log;
 
-import com.zhongwang.sale.BuildConfig;
-
 
 public class HwLog {
     private static boolean isDebug = true;
-    private static String logfilter = "ss : ";
+    private static String logfilter = "HwLog : ";
 
     public static void v(String tag, String msg) {
         if (isDebug) {

@@ -18,6 +18,7 @@
     <!-- 6级文字-->
     <color name="font6">#232323 </color>
 
+    <color name="redtrans">#12ea3021</color>
     <color name="PrimaryRed">#ea3021</color>
     <!--淡灰色 -->
     <color name="Gainsboro">#DCDCDC</color>

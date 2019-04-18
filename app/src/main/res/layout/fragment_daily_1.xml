@@ -4,60 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        app:tabIndicatorColor="@color/main_title"
-        app:tabIndicatorHeight="2dp"
-        app:tabMode="fixed"
-        app:tabSelectedTextColor="@color/main_title"
-        app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        app:tabTextColor="@color/font2"></android.support.design.widget.TabLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@+id/tablayout"
-        android:background="@color/font2" />
-
-    <LinearLayout
-        android:id="@+id/option_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tablayout"
-        android:layout_margin="@dimen/item_padding"
-        android:orientation="horizontal">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
-
-        </Spinner>
-
-        <TextView
-            android:id="@+id/datetime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="选择时间" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/init_data"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/option_layout"
-        android:ellipsize="marquee"
-        android:gravity="center"
-        android:marqueeRepeatLimit="marquee_forever"
-        android:padding="@dimen/item_padding"
-        android:singleLine="true"
-        android:text="初期数 " />
-
     <com.zhongwang.sale.view.LeanTextView
         android:id="@+id/ready_commit"
         android:layout_width="match_parent"
@@ -126,40 +72,6 @@
                         android:inputType="numberDecimal" />
                 </TableRow>
 
-                <TableRow android:id="@+id/row_ticket0">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:paddingRight="@dimen/item_padding"
-                        android:text="开票块数：" />
-
-                    <EditText
-                        android:id="@+id/bill_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="（必填）请输入开票块数"
-                        android:inputType="number" />
-                </TableRow>
-
-                <TableRow android:id="@+id/row_ticket1">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:paddingRight="@dimen/item_padding"
-                        android:text="开票单价：" />
-
-                    <EditText
-                        android:id="@+id/bill_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="（必填）请输入开票单价"
-                        android:inputType="numberDecimal" />
-                </TableRow>
-
                 <TableRow>
 
                     <TextView
@@ -177,38 +89,6 @@
                         android:inputType="numberDecimal" />
                 </TableRow>
 
-                <TableRow android:id="@+id/row_tray0">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:paddingRight="@dimen/item_padding"
-                        android:text="发出托盘：" />
-
-                    <EditText
-                        android:id="@+id/send_tray_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="请输入发出托盘数"
-                        android:inputType="number" />
-                </TableRow>
-
-                <TableRow android:id="@+id/row_tray1">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:paddingRight="@dimen/item_padding"
-                        android:text="回收托盘：" />
-
-                    <EditText
-                        android:id="@+id/back_tray_number"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="请输入回收托盘数"
-                        android:inputType="number" />
-                </TableRow>
                 <TableRow>
 
                     <TextView
@@ -225,7 +105,7 @@
                         android:hint="请填写备注" />
                 </TableRow>
 
-                <TableRow android:id="@+id/row_left_tray">
+                <TableRow>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -241,7 +121,8 @@
                         android:text="0.0" />
                 </TableRow>
 
-                <TableRow android:id="@+id/row_money">
+                <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -256,7 +137,8 @@
                         android:text="0.0" />
                 </TableRow>
 
-                <TableRow android:id="@+id/row_balance">
+                <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -271,13 +153,15 @@
                         android:text="0.0" />
                 </TableRow>
 
-                <TableRow android:id="@+id/row_happen">
+                <TableRow>
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
                         android:paddingRight="@dimen/item_padding"
                         android:text="当日发生：" />
+
                     <TextView
                         android:id="@+id/current_happen"
                         android:layout_width="wrap_content"

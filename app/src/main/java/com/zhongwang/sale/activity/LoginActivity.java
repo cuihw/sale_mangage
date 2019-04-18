@@ -86,7 +86,7 @@ public class LoginActivity extends BaseActivity {
     private void loginSucceed(LoginResult bean) {
         PreferencesUtils.putBoolean(this,Constants.IS_LOGIN, true);
         PreferencesUtils.putString(this,Constants.LOGIN_DATA, bean.toJson());
-        HwLog.i(TAG, "data = " + bean.getData());
+        HwLog.i(TAG, "LoginResult = " + bean.toJson());
         finish();
     }
 

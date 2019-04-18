@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.zhongwang.sale.Constants;
@@ -25,11 +26,13 @@ import com.zhongwang.sale.dialog.PopupDialog;
 import com.zhongwang.sale.module.Bean;
 import com.zhongwang.sale.module.InitDataBean;
 import com.zhongwang.sale.module.LoginResult;
+import com.zhongwang.sale.module.UpdateDataBean;
 import com.zhongwang.sale.network.HttpRequest;
 import com.zhongwang.sale.utils.DateUtils;
 import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
+import com.zhongwang.sale.view.LeanTextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,8 +52,8 @@ import butterknife.BindView;
  */
 public class FragmentDaily extends FragmentBase {
     private static final String TAG = "FragmentDaily";
-    private static final int BIAO_ZHUAN = 0;
-    private static final int JIA_QI = 1;
+    private static final int BIAO_ZHUAN = 1;
+    private static final int JIA_QI = 0;
 
     @BindView(R.id.tablayout)
     TabLayout tablayout;
@@ -78,20 +81,52 @@ public class FragmentDaily extends FragmentBase {
     @BindView(R.id.back_tray_number)
     EditText back_tray_number;
 
+    @BindView(R.id.remark_tv)
+    EditText remark_tv;
 
-    LoginResult loginData;
+    @BindView(R.id.bill_number)
+    EditText bill_number;
+    @BindView(R.id.bill_price)
+    EditText bill_price;
 
-    LoginResult.GroundData groundData;
+    @BindView(R.id.rest_tray)
+    TextView rest_tray;
 
-    int type = BIAO_ZHUAN;
+    @BindView(R.id.total_price)
+    TextView total_price;
 
-    Calendar calendar = Calendar.getInstance();
+    @BindView(R.id.balance_money)
+    TextView balance_money;
+    @BindView(R.id.current_happen)
+    TextView current_happen;
+
+    @BindView(R.id.row_ticket0)
+    TableRow row_ticket0;
+    @BindView(R.id.row_ticket1)
+    TableRow row_ticket1;
+
+    @BindView(R.id.row_tray0)
+    TableRow row_tray0;
+    @BindView(R.id.row_tray1)
+    TableRow row_tray1;
+
+
+    @BindView(R.id.ready_commit)
+    LeanTextView ready_commit;
+
+    private LoginResult loginData;
+
+    private LoginResult.GroundData groundData;
+
+    private int type = JIA_QI;
+
+    private Calendar calendar = Calendar.getInstance();
 
     private ArrayAdapter<String> adapter;
 
-    AlertDialog initDataAlertDialog;
+    private AlertDialog initDataAlertDialog;
 
-    InitDataBean initDataBean; // 初期值
+    private InitDataBean initDataBean; // 初期值
 
     public static FragmentDaily newInstance() {
         FragmentDaily fragment = new FragmentDaily();
@@ -114,6 +149,7 @@ public class FragmentDaily extends FragmentBase {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 type = tab.getPosition();
+                setUiByType(type);
             }
 
             @Override
@@ -160,12 +196,35 @@ public class FragmentDaily extends FragmentBase {
         });
     }
 
-    private void upLoadDailyReport() {
-        // check type
-
+    private void setUiByType(int type) {
         if (type == JIA_QI) {
-
+            row_ticket0.setVisibility(View.GONE);
+            row_ticket1.setVisibility(View.GONE);
+            row_tray0.setVisibility(View.VISIBLE);
+            row_tray1.setVisibility(View.VISIBLE);
+        } else {
+            row_ticket0.setVisibility(View.VISIBLE);
+            row_ticket1.setVisibility(View.VISIBLE);
+            row_tray0.setVisibility(View.GONE);
+            row_tray1.setVisibility(View.GONE);
         }
+        ready_commit.setVisibility(View.GONE);
+        number.setText("");
+        price.setText("");
+        bill_number.setText("");
+        bill_price.setText("");
+        backmoney.setText("");
+        send_tray_number.setText("");
+        back_tray_number.setText("");
+        remark_tv.setText("");
+        rest_tray.setText("0.0");
+        total_price.setText("0.0");
+        balance_money.setText("0.0");
+        current_happen.setText("0.0");
+    }
+
+    private void upLoadDailyReport() {
+
         if (groundData == null) {
             // 请选择工地
             alertDia("请选择工地");
@@ -182,6 +241,9 @@ public class FragmentDaily extends FragmentBase {
         String backMoney = backmoney.getText().toString(); // 回款
         String sendTrayNumber = send_tray_number.getText().toString(); // 发出托盘数
         String backTrayNumber = back_tray_number.getText().toString(); // 发出托盘数
+        String remark = remark_tv.getText().toString(); // 发出托盘数
+        String billNumber = bill_number.getText().toString();
+        String billPrice = bill_price.getText().toString();
 
         if (TextUtils.isEmpty(numbers)) {
             alertDia("请输入数量");
@@ -200,29 +262,81 @@ public class FragmentDaily extends FragmentBase {
         if (!TextUtils.isEmpty(backMoney)) {
             params.put("rmoney", backMoney);
         }
-        if (!TextUtils.isEmpty(sendTrayNumber)) {
-            params.put("dsend", sendTrayNumber);
-        }
-
-        if (!TextUtils.isEmpty(backTrayNumber)) {
-            params.put("drecycling", backTrayNumber);
-        }
 
 
-        if (!TextUtils.isEmpty(backTrayNumber)) {
-            params.put("remark", backTrayNumber);
+        if (!TextUtils.isEmpty(remark)) {
+            params.put("remark", remark);
         }
 
         params.put("uname", loginData.getUsername());
         String date = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
         params.put("up_date", date);
+        String postUrl = Constants.SALES_UPDATE;
+        // check type
+        if (type == JIA_QI) {
+            if (!TextUtils.isEmpty(sendTrayNumber)) {
+                params.put("dsend", sendTrayNumber);
+            }
+            if (!TextUtils.isEmpty(backTrayNumber)) {
+                params.put("drecycling", backTrayNumber);
+            }
+        } else {
+            postUrl = Constants.SALES_UPDATE_STANDARD;
+            if (!TextUtils.isEmpty(billNumber)) {
+                params.put("billing_number", billNumber);
+            } else {
+                alertDia("请填写开票数量");
+                return;
+            }
+            if (!TextUtils.isEmpty(billPrice)) {
+                params.put("billing_price", billPrice);
+            } else {
+                alertDia("请填写开票单价");
+                return;
+            }
+        }
 
-        HttpRequest.postData(getContext(), Constants.SALES_UPDATE, params, new HttpRequest.RespListener<Bean>() {
+        HttpRequest.postData(getContext(), postUrl, params, new HttpRequest.RespListener<UpdateDataBean>() {
             @Override
-            public void onResponse(int status, Bean bean) {
-                HwLog.i(TAG, bean.getMessage());
+            public void onResponse(int status, UpdateDataBean bean) {
+                HwLog.i(TAG, bean.getMessage() + ", bean = " + bean.toJson());
+                handleUpdata(bean, type);
             }
         });
+    }
+
+    private void handleUpdata(UpdateDataBean bean, int type) {
+        if (bean == null) return;
+        if (bean.getCode() != Constants.SUCCEED_CODE) {
+            showTextToast("提示：" + bean.getMessage() + ", 返回码：" + bean.getCode());
+            return;
+        }
+        showTextToast(bean.getMessage());
+        ready_commit.setVisibility(View.VISIBLE);
+        if (type == JIA_QI) {
+            UpdateDataBean.DailyData data = bean.getData();
+            if (data == null) {
+                showTextToast("数据为空，请联系管理员");
+                return;
+            } else {
+                rest_tray.setText("" + data.getDresidue());
+                total_price.setText(data.getDmoney());
+                balance_money.setText("" + data.getDbalance());
+                current_happen.setText("" + data.getDmoney2());
+            }
+        } else {
+            UpdateDataBean.DailyData data = bean.getData();
+            if (data == null) {
+                showTextToast("数据为空，请联系管理员");
+                return;
+            } else {
+                balance_money.setText("" + data.getDbalance());
+            }
+        }
+    }
+
+    private void showTextToast(String s) {
+        ToastUtil.showTextToast(getContext(), s);
     }
 
 
@@ -356,14 +470,14 @@ public class FragmentDaily extends FragmentBase {
         confirm.setOnClickListener(v -> {
             String initMoney = init_money.getText().toString();
             String initTray = init_tray.getText().toString();
-            postInitData(initMoney, initTray);
+            uploadInitData(initMoney, initTray);
         });
         initDataAlertDialog.show();
     }
 
 
     // 上传初期数
-    private void postInitData(String init_money, String init_tray) {
+    private void uploadInitData(String init_money, String init_tray) {
         if (TextUtils.isEmpty(init_money)) {
             alertDia("初期金额为空，不能上传");
             return;
@@ -444,11 +558,17 @@ public class FragmentDaily extends FragmentBase {
     }
 
     private void initView() {
-        tablayout.addTab(tablayout.newTab().setText("标砖"));
+        ready_commit.setmDegrees(30);
+        ready_commit.setVisibility(View.GONE);
         tablayout.addTab(tablayout.newTab().setText("加气"));
+        tablayout.addTab(tablayout.newTab().setText("标砖"));
         String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
         datetime.setText(sDate);
         init_data.setSelected(true);
+        row_ticket0.setVisibility(View.GONE);
+        row_ticket1.setVisibility(View.GONE);
+        row_tray0.setVisibility(View.VISIBLE);
+        row_tray1.setVisibility(View.VISIBLE);
     }
 
     private void initSpinner(List<LoginResult.GroundData> datas) {

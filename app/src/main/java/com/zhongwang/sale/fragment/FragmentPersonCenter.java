@@ -100,7 +100,7 @@ public class FragmentPersonCenter extends FragmentBase {
             @Override
             public void onUpdate(BaseAdapterHelper helper, LoginResult.GroundData item, int position) {
                 helper.setText(R.id.wid, "工地号：" + item.getId());
-                helper.setText(R.id.wname, "名字：" + item.getName());
+                helper.setText(R.id.wname, "名字：" + item.getName() + "(" + item.getContract_price() + ")");
             }
         };
         listview.setAdapter(adapter);

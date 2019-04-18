@@ -18,10 +18,6 @@ public class InitDataBean extends Bean {
         this.data = data;
     }
 
-    public String toJson() {
-        return new Gson().toJson(this);
-    }
-
     public static class InitData {
         String wid;
         String on_time;
