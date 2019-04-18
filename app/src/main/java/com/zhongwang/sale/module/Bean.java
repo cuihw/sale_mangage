@@ -1,5 +1,7 @@
 package com.zhongwang.sale.module;
 
+import com.google.gson.Gson;
+
 public class Bean {
     private int code;
     private String message;
@@ -16,4 +18,9 @@ public class Bean {
     public String getMessage() {
         return message;
     }
+
+    public String toJson() {
+        return new Gson().toJson(this);
+    }
+
 }

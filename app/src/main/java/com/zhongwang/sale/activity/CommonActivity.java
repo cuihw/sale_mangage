@@ -6,7 +6,7 @@ import android.support.annotation.Nullable;
 import com.zhongwang.sale.BaseActivity;
 import com.zhongwang.sale.R;
 
-public class CommenActivity extends BaseActivity {
+public class CommonActivity extends BaseActivity {
 
 
     @Override

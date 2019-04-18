@@ -14,11 +14,6 @@ public class LoginResult extends Bean{
 
     private List<GroundData> data;
 
-    public static void clearLoginData(Context context) {
-        PreferencesUtils.putBoolean(context, Constants.IS_LOGIN, false);
-        PreferencesUtils.putString(context, Constants.LOGIN_DATA, "");
-    }
-
     public String getUsername() {
         return username;
     }
@@ -51,9 +46,6 @@ public class LoginResult extends Bean{
             this.name = name;
         }
     }
-    public String toJson(){
-        return new Gson().toJson(this);
-    }
 
     public static LoginResult fromJson(String json) {
         return new Gson().fromJson(json,LoginResult.class);
@@ -71,4 +63,10 @@ public class LoginResult extends Bean{
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public static void clearLoginData(Context context) {
+        PreferencesUtils.putBoolean(context, Constants.IS_LOGIN, false);
+        PreferencesUtils.putString(context, Constants.LOGIN_DATA, "");
+    }
+
 }

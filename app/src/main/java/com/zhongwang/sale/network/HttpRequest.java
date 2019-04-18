@@ -1,10 +1,10 @@
 package com.zhongwang.sale.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
-import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.MemoryCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
@@ -33,11 +33,11 @@ public class HttpRequest {
         builder = okHttpclient.newBuilder();
 
         // 全局的读取超时时间
-        builder.readTimeout(5000, TimeUnit.MILLISECONDS);
+        builder.readTimeout(10000, TimeUnit.MILLISECONDS);
         // 全局的写入超时时间
-        builder.writeTimeout(5000, TimeUnit.MILLISECONDS);
+        builder.writeTimeout(10000, TimeUnit.MILLISECONDS);
         // 全局的连接超时时间
-        builder.connectTimeout(5000, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(10000, TimeUnit.MILLISECONDS);
         builder.cookieJar(new CookieJarImpl(new MemoryCookieStore()));
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("CHRIS");
         // log打印级别，决定了log显示的详细程度
@@ -79,6 +79,7 @@ public class HttpRequest {
             params = new HashMap<>();
         }
         JSONObject jsonObject = new JSONObject(params);
+        Log.i(TAG, "params:" + jsonObject.toString());
         String clz = null;
         if (context != null) {
             clz = context.getClass().getSimpleName();
