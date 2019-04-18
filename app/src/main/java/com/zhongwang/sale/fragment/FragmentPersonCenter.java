@@ -38,6 +38,8 @@ public class FragmentPersonCenter extends FragmentBase {
     @BindView(R.id.listview)
     ListView listview;
 
+    @BindView(R.id.logout)
+    TextView logout;
 
     LoginResult loginResult;
     CommonAdapter<LoginResult.GroundData> adapter;
@@ -59,7 +61,10 @@ public class FragmentPersonCenter extends FragmentBase {
     }
 
     private void initListener() {
-
+        logout.setOnClickListener(v -> {
+            LoginResult.clearLoginData(getContext());
+            LoginActivity.startActivity(getContext(), null);
+        });
     }
 
     @Override
@@ -74,7 +79,7 @@ public class FragmentPersonCenter extends FragmentBase {
             LoginActivity.startActivity(getContext(), null);
             return;
         }
-        name.setText(loginResult.getUsername());
+        name.setText("用户名：" + loginResult.getUsername());
         initListview();
     }
 

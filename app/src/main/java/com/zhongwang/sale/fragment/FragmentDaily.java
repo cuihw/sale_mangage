@@ -128,6 +128,7 @@ public class FragmentDaily extends FragmentBase {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                groundData = null;
                 String str = parent.getItemAtPosition(position).toString();
                 HwLog.i(TAG, "spinner id = " + id + ", str = " + str);
                 for (LoginResult.GroundData data : loginData.getData()) {
@@ -205,6 +206,11 @@ public class FragmentDaily extends FragmentBase {
 
         if (!TextUtils.isEmpty(backTrayNumber)) {
             params.put("drecycling", backTrayNumber);
+        }
+
+
+        if (!TextUtils.isEmpty(backTrayNumber)) {
+            params.put("remark", backTrayNumber);
         }
 
         params.put("uname", loginData.getUsername());
