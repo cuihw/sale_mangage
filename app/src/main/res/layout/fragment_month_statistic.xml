@@ -3,8 +3,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/option_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="month statistic" />
+        android:layout_below="@+id/tablayout"
+        android:layout_margin="@dimen/item_padding"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:entries="@array/arrayoption"></Spinner>
+
+        <TextView
+            android:id="@+id/datetime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="选择时间" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/option_layout"
+        android:background="@color/font2" />
+
+    <ListView
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/option_layout"
+        android:padding="@dimen/item_padding"></ListView>
+
 </RelativeLayout>

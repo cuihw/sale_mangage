@@ -110,9 +110,21 @@ public class FragmentDaily extends FragmentBase {
     @BindView(R.id.row_tray1)
     TableRow row_tray1;
 
+    @BindView(R.id.row_left_tray)
+    TableRow row_left_tray;
+    @BindView(R.id.row_money)
+    TableRow row_money;
+    @BindView(R.id.row_balance)
+    TableRow row_balance;
+    @BindView(R.id.row_happen)
+    TableRow row_happen;
 
     @BindView(R.id.ready_commit)
     LeanTextView ready_commit;
+
+    @BindView(R.id.report_square)
+    EditText report_square;
+
 
     private LoginResult loginData;
 
@@ -127,6 +139,9 @@ public class FragmentDaily extends FragmentBase {
     private AlertDialog initDataAlertDialog;
 
     private InitDataBean initDataBean; // 初期值
+
+    private UpdateDataBean jiaqiBean;  // 加气
+    private UpdateDataBean biaozhuanBean; // 标砖
 
     public static FragmentDaily newInstance() {
         FragmentDaily fragment = new FragmentDaily();
@@ -191,7 +206,7 @@ public class FragmentDaily extends FragmentBase {
             if (groundData != null) {
                 showInitDataDialog();
             } else {
-                alertDia("请选择工地");
+                alertMessage("请选择工地");
             }
         });
     }
@@ -202,11 +217,18 @@ public class FragmentDaily extends FragmentBase {
             row_ticket1.setVisibility(View.GONE);
             row_tray0.setVisibility(View.VISIBLE);
             row_tray1.setVisibility(View.VISIBLE);
+            row_left_tray.setVisibility(View.VISIBLE);
+            row_money.setVisibility(View.VISIBLE);
+            row_happen.setVisibility(View.VISIBLE);
         } else {
             row_ticket0.setVisibility(View.VISIBLE);
             row_ticket1.setVisibility(View.VISIBLE);
             row_tray0.setVisibility(View.GONE);
             row_tray1.setVisibility(View.GONE);
+
+            row_left_tray.setVisibility(View.GONE);
+            row_money.setVisibility(View.GONE);
+            row_happen.setVisibility(View.GONE);
         }
         ready_commit.setVisibility(View.GONE);
         number.setText("");
@@ -224,10 +246,9 @@ public class FragmentDaily extends FragmentBase {
     }
 
     private void upLoadDailyReport() {
-
         if (groundData == null) {
             // 请选择工地
-            alertDia("请选择工地");
+            alertMessage("请选择工地");
             return;
         }
 
@@ -242,15 +263,16 @@ public class FragmentDaily extends FragmentBase {
         String sendTrayNumber = send_tray_number.getText().toString(); // 发出托盘数
         String backTrayNumber = back_tray_number.getText().toString(); // 发出托盘数
         String remark = remark_tv.getText().toString(); // 发出托盘数
+        String reportSquare = report_square.getText().toString(); // 发出托盘数
         String billNumber = bill_number.getText().toString();
         String billPrice = bill_price.getText().toString();
 
         if (TextUtils.isEmpty(numbers)) {
-            alertDia("请输入数量");
+            alertMessage("请输入数量");
             return;
         }
         if (TextUtils.isEmpty(unitPrice)) {
-            alertDia("请输入单价");
+            alertMessage("请输入单价");
             return;
         }
 
@@ -263,7 +285,6 @@ public class FragmentDaily extends FragmentBase {
             params.put("rmoney", backMoney);
         }
 
-
         if (!TextUtils.isEmpty(remark)) {
             params.put("remark", remark);
         }
@@ -271,6 +292,8 @@ public class FragmentDaily extends FragmentBase {
         params.put("uname", loginData.getUsername());
         String date = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
         params.put("up_date", date);
+
+
         String postUrl = Constants.SALES_UPDATE;
         // check type
         if (type == JIA_QI) {
@@ -280,18 +303,22 @@ public class FragmentDaily extends FragmentBase {
             if (!TextUtils.isEmpty(backTrayNumber)) {
                 params.put("drecycling", backTrayNumber);
             }
+
+            if (!TextUtils.isEmpty(reportSquare)) {
+                params.put("report_square", reportSquare);
+            }
         } else {
             postUrl = Constants.SALES_UPDATE_STANDARD;
             if (!TextUtils.isEmpty(billNumber)) {
                 params.put("billing_number", billNumber);
             } else {
-                alertDia("请填写开票数量");
+                alertMessage("请填写开票数量");
                 return;
             }
             if (!TextUtils.isEmpty(billPrice)) {
                 params.put("billing_price", billPrice);
             } else {
-                alertDia("请填写开票单价");
+                alertMessage("请填写开票单价");
                 return;
             }
         }
@@ -479,11 +506,11 @@ public class FragmentDaily extends FragmentBase {
     // 上传初期数
     private void uploadInitData(String init_money, String init_tray) {
         if (TextUtils.isEmpty(init_money)) {
-            alertDia("初期金额为空，不能上传");
+            alertMessage("初期金额为空，不能上传");
             return;
         }
         if (TextUtils.isEmpty(init_tray)) {
-            alertDia("初期托盘为空，不能上传");
+            alertMessage("初期托盘为空，不能上传");
             return;
         }
 
@@ -519,7 +546,7 @@ public class FragmentDaily extends FragmentBase {
         });
     }
 
-    private void alertDia(String s) {
+    private void alertMessage(String s) {
         PopupDialog dialog = PopupDialog.create(getContext(), "警   告", s, "确定", null);
         dialog.show();
     }

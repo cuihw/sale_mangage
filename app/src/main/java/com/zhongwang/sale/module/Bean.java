@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class Bean {
     private int code;
-    private String message;
+    private String message = "没有查询结果";
     public void setCode(int code) {
         this.code = code;
     }
@@ -22,5 +22,4 @@ public class Bean {
     public String toJson() {
         return new Gson().toJson(this);
     }
-
 }

@@ -31,15 +31,14 @@
 
         <Spinner
             android:id="@+id/spinner"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
-
         </Spinner>
 
         <TextView
             android:id="@+id/datetime"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
@@ -209,6 +208,24 @@
                         android:hint="请输入回收托盘数"
                         android:inputType="number" />
                 </TableRow>
+
+                <TableRow android:id="@+id/row_square">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right|center_vertical"
+                        android:paddingRight="@dimen/item_padding"
+                        android:text="上报平方：" />
+
+                    <EditText
+                        android:id="@+id/report_square"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="请输入回平方数"
+                        android:inputType="number" />
+                </TableRow>
+
                 <TableRow>
 
                     <TextView
@@ -262,7 +279,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
                         android:paddingRight="@dimen/item_padding"
-                        android:text="余款：" />
+                        android:text="余额：" />
 
                     <TextView
                         android:id="@+id/balance_money"

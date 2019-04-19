@@ -10,6 +10,8 @@ import com.lzy.okgo.cookie.store.MemoryCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
 import com.lzy.okgo.model.Response;
 import com.zhongwang.sale.App;
+import com.zhongwang.sale.module.Bean;
+import com.zhongwang.sale.module.DayStatisticBean;
 
 import org.json.JSONObject;
 
@@ -92,17 +94,28 @@ public class HttpRequest {
             @Override
             public void onSuccess(Response<String> response) {
                 String body = response.body();
+                Bean base = new Gson().fromJson(body, Bean.class);
                 try {
                     Class<T> clz = listener.getClazz();
                     if (clz != String.class) {
+                        if (clz == DayStatisticBean.class) {
+                            if (body.contains("\"data\":{") || body.contains("\"data\":null")) {
+                                DayStatisticBean data = new DayStatisticBean();
+                                data.setCode(base.getCode());
+                                data.setMessage(base.getMessage());
+                                listener.onResponse(0, data);
+                                return;
+                            }
+                        }
                         T data = new Gson().fromJson(body, clz);
                         listener.onResponse(0, data);
                     } else  {
-                        listener.onResponse(0, body);
+                        T data = clz.newInstance();
+                        listener.onResponse(0, data);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    listener.onResponse(0, body);
+                    listener.onResponse(0, null);
                 }
             }
         });

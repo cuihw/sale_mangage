@@ -9,6 +9,8 @@
     <string name="month_statistics">月统计</string>
     <string name="personal">个人中心</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="arrayoption">
+        <item>加气</item>
+        <item>标砖</item>
+    </string-array>
 </resources>

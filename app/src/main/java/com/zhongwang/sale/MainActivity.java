@@ -45,23 +45,29 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         initTab();
         initListener();
+        tranToFragment(fragmentDaily);
     }
 
     private void initListener() {
+
         jpTabBar.setTabListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int index) {
                 switch (index) {
                     case 0: // 日报
+                        setTitle("日报");
                         tranToFragment(fragmentDaily);
                         break;
                     case 1: // 日报查询
+                        setTitle("日报查询");
                         tranToFragment(fragmentDayStatistic);
                         break;
                     case 2: // 月报
+                        setTitle("月报查询");
                         tranToFragment(fragmentMonthStatistic);
                         break;
                     case 3: // 个人中心
+                        setTitle("个人中心");
                         tranToFragment(fragmentPersonCenter);
                         break;
                     default: // 转到主页
@@ -80,7 +86,6 @@ public class MainActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         initData();
-        tranToFragment(fragmentDaily);
     }
 
     private void initData() {
@@ -105,6 +110,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initTab() {
+        setTitle("日报");
         jpTabBar.setTitles(home, day_statistics, month_statistics, personal)
                 .setNormalIcons(R.mipmap.daily_default, R.mipmap.day_statistical_default, R.mipmap.month_statistical_default, R.mipmap.personal_center_default)
                 .setSelectedIcons(R.mipmap.daily, R.mipmap.day_statistical, R.mipmap.month_statistical, R.mipmap.personal_center)

@@ -5,7 +5,18 @@
     android:layout_margin="@dimen/item_padding"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="100dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:padding="10dp"
+        android:text="版本号2.0" />
     <ImageView
+        android:layout_below="@+id/version"
         android:id="@+id/imageview"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
