@@ -1,6 +1,7 @@
 package com.zhongwang.sale.fragment;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,21 +13,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.classic.adapter.BaseAdapterHelper;
+import com.classic.adapter.CommonAdapter;
 import com.zhongwang.sale.Constants;
 import com.zhongwang.sale.R;
 import com.zhongwang.sale.dialog.PopupDialog;
-import com.zhongwang.sale.module.Bean;
 import com.zhongwang.sale.module.LoginResult;
+import com.zhongwang.sale.module.MonthlyStaticBean;
+import com.zhongwang.sale.module.MonthlyStaticData;
 import com.zhongwang.sale.network.HttpRequest;
 import com.zhongwang.sale.utils.DateUtils;
 import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -48,15 +54,22 @@ public class FragmentMonthStatistic extends FragmentBase {
     TextView datetime;
     @BindView(R.id.spinner)
     Spinner spinner;
+
+
+    @BindView(R.id.listview)
+    ListView listview;
     LoginResult loginData;
     private Calendar calendar;
+
+    MultipleLayoutAdapter multiAdapter;
+
+    private int type = 0;
+    private List<MonthlyStaticData> listData;
 
     public static FragmentMonthStatistic newInstance() {
         FragmentMonthStatistic fragment = new FragmentMonthStatistic();
         return fragment;
     }
-
-    private int type = 0;
 
     @Nullable
     @Override
@@ -65,8 +78,15 @@ public class FragmentMonthStatistic extends FragmentBase {
         view = inflater.inflate(R.layout.fragment_month_statistic, container, false);
         bindButterKnife(view);
         initListener();
+        initView();
         initData();
+
         return view;
+    }
+
+    private void initView() {
+        multiAdapter = new MultipleLayoutAdapter(getContext(), R.layout.item_monthly_query, listData);
+        listview.setAdapter(multiAdapter);
     }
 
     private void initListener() {
@@ -159,12 +179,21 @@ public class FragmentMonthStatistic extends FragmentBase {
         params.put("month", month);
         params.put("type", type + 1);
 
-        HttpRequest.postData(getContext(), Constants.MONTH_REQUEST, params, new HttpRequest.RespListener<Bean>() {
+        HttpRequest.postData(getContext(), Constants.MONTH_REQUEST, params, new HttpRequest.RespListener<MonthlyStaticBean>() {
             @Override
-            public void onResponse(int status, Bean bean) {
+            public void onResponse(int status, MonthlyStaticBean bean) {
                 ToastUtil.showTextToast(getContext(), bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
-
+                    multiAdapter.replaceAll(new ArrayList<>());
+                    List<MonthlyStaticData> data = bean.getData();
+                    if (data == null || data.size() == 0) {
+                        multiAdapter.replaceAll(new ArrayList<>());
+                        ToastUtil.showTextToast(getContext(), bean.getMessage());
+                        return;
+                    }
+                    multiAdapter.replaceAll(data);
+                } else {
+                    multiAdapter.replaceAll(new ArrayList<>());
                 }
             }
         });
@@ -189,4 +218,48 @@ public class FragmentMonthStatistic extends FragmentBase {
         calendar = null;
         super.onPause();
     }
+
+
+    private final class MultipleLayoutAdapter extends CommonAdapter<MonthlyStaticData> {
+
+        public MultipleLayoutAdapter(Context context, int layoutResId, List<MonthlyStaticData> data) {
+            super(context, layoutResId, data);
+        }
+
+        //多种布局重写此方法即可
+        @Override
+        public int getLayoutResId(MonthlyStaticData item, int position) {
+            int layoutResId = -1;
+            if (item.isJiaQi()) {
+                layoutResId = R.layout.item_monthly_query;
+            } else {
+                layoutResId = R.layout.item_monthly_query1;
+            }
+            return layoutResId;
+        }
+
+        @Override
+        public void onUpdate(BaseAdapterHelper helper, MonthlyStaticData item, int position) {
+            helper.setText(R.id.data_tv, item.getWname());
+            helper.setText(R.id.number2, "" + item.getOut_number()); // 出货数量
+            helper.setText(R.id.number3, "" + item.getPrice());  // 价格
+            helper.setText(R.id.number, "" + item.getRmoney()); // 回款金额
+            helper.setText(R.id.number1, "" + item.getDmoney()); // 销售金额
+            helper.setText(R.id.number4, "" + item.getDbalance()); // 余款
+
+            if (item.isJiaQi()) {
+                helper.setText(R.id.number5, "" + item.getInit_money()); // 初期金额
+                helper.setText(R.id.number6, "" + item.getDsend()); // 发出托盘
+                helper.setText(R.id.number7, "" + item.getDrecycling()); // 回收托盘
+                helper.setText(R.id.number8, "" + item.getDresidue()); // 剩余托盘
+                helper.setText(R.id.number9, "" + item.getInit_tray()); // 初期托盘数
+                helper.setText(R.id.number10, "" + item.getInit_tray()); // 上报平方
+            } else {
+                helper.setText(R.id.number5, "" + item.getBilling_price()); // 开票价格
+                helper.setText(R.id.number6, "" + item.getBilling_number()); // 开票数量
+                helper.setText(R.id.number6, "" + item.getBilling_dmoney()); // 开票总金额
+            }
+        }
+    }
+
 }

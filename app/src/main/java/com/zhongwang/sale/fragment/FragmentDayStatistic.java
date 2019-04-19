@@ -263,7 +263,6 @@ public class FragmentDayStatistic extends FragmentBase {
         super.onPause();
     }
 
-
     private final class MultipleLayoutAdapter extends CommonAdapter<DayStatisticBean.DayStatisticsData> {
 
         public MultipleLayoutAdapter(Context context, int layoutResId, List<DayStatisticBean.DayStatisticsData> data) {
@@ -288,7 +287,7 @@ public class FragmentDayStatistic extends FragmentBase {
             helper.setText(R.id.number2, "" + item.getOut_number()); // 出货数量
             helper.setText(R.id.number3, "" + item.getPrice());  // 价格
             helper.setText(R.id.number, "" + item.getRmoney()); // 回款金额
-            helper.setText(R.id.number12, "" + item.getRemark()); // 备注
+            helper.setText(R.id.number12, item.getRemark()); // 备注
 
             if (item.isJiaQi()) {
                 helper.setText(R.id.number1, "" + item.getDsend()); // 当日发出托盘

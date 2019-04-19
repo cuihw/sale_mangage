@@ -118,6 +118,9 @@ public class FragmentDaily extends FragmentBase {
     TableRow row_balance;
     @BindView(R.id.row_happen)
     TableRow row_happen;
+    @BindView(R.id.row_square)
+    TableRow row_square;
+
 
     @BindView(R.id.ready_commit)
     LeanTextView ready_commit;
@@ -220,6 +223,8 @@ public class FragmentDaily extends FragmentBase {
             row_left_tray.setVisibility(View.VISIBLE);
             row_money.setVisibility(View.VISIBLE);
             row_happen.setVisibility(View.VISIBLE);
+            row_square.setVisibility(View.VISIBLE);
+
         } else {
             row_ticket0.setVisibility(View.VISIBLE);
             row_ticket1.setVisibility(View.VISIBLE);
@@ -229,6 +234,7 @@ public class FragmentDaily extends FragmentBase {
             row_left_tray.setVisibility(View.GONE);
             row_money.setVisibility(View.GONE);
             row_happen.setVisibility(View.GONE);
+            row_square.setVisibility(View.GONE);
         }
         ready_commit.setVisibility(View.GONE);
         number.setText("");
@@ -243,6 +249,7 @@ public class FragmentDaily extends FragmentBase {
         total_price.setText("0.0");
         balance_money.setText("0.0");
         current_happen.setText("0.0");
+        report_square.setText("");
     }
 
     private void upLoadDailyReport() {
