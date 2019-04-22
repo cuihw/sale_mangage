@@ -83,6 +83,7 @@
             android:layout_marginRight="50dp"
             android:background="@drawable/background_border1"
             android:orientation="vertical"
+            android:windowSoftInputMode="stateHidden"
             android:padding="5dp">
 
             <TableLayout

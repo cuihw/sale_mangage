@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lzy.okgo.OkGo;
+import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.cookie.CookieJarImpl;
 import com.lzy.okgo.cookie.store.MemoryCookieStore;
 import com.lzy.okgo.interceptor.HttpLoggingInterceptor;
@@ -133,5 +134,15 @@ public class HttpRequest {
         OkGo.getInstance().cancelTag(tag);
     }
 
+
+    public static void getRequest(Context context, String url, final ResponseListener<String> listener) {
+        OkGo.<String>get(url).tag(context.getClass().getSimpleName())
+                .execute(new StringCallback() {
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        listener.onResponse(0, response.body());
+                    }
+                });
+    }
 
 }

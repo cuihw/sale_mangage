@@ -1,6 +1,10 @@
 package com.zhongwang.sale;
 
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.OnTabSelectListener;
@@ -10,6 +14,7 @@ import com.zhongwang.sale.fragment.FragmentDayStatistic;
 import com.zhongwang.sale.fragment.FragmentMonthStatistic;
 import com.zhongwang.sale.fragment.FragmentPersonCenter;
 import com.zhongwang.sale.module.LoginResult;
+import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
 
@@ -17,9 +22,14 @@ import butterknife.BindString;
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = "MainActivity";
 
     @BindView(R.id.tabbar)
     JPTabBar jpTabBar;
+
+    @BindView(R.id.main)
+    RelativeLayout main;
+
 
     @BindString(R.string.home)
     String home;
@@ -80,7 +90,56 @@ public class MainActivity extends BaseActivity {
                 return false;
             }
         });
+
+
+//        main.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+//            @Override
+//            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+//                InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+//                if ( inputMethodManager.isActive( ) ) {
+//                    jpTabBar.setVisibility(View.GONE);
+//                } else {
+//                    jpTabBar.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
+        setListenerToRootView();
     }
+
+    private void setListenerToRootView() {
+        final View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+
+                boolean mKeyboardUp = isKeyboardShown(rootView);
+                if (mKeyboardUp) {
+                    //键盘弹出
+                    HwLog.i(TAG, "mKeyboardUp = " + mKeyboardUp);
+                    jpTabBar.setVisibility(View.GONE);
+                } else {
+                    //键盘收起
+                    HwLog.i(TAG, "mKeyboardUp = " + mKeyboardUp);
+                    jpTabBar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+    }
+
+
+    private boolean isKeyboardShown(View rootView) {
+//        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+//        return inputMethodManager.isActive();
+        final int softKeyboardHeight = 10;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        // DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int height = MainActivity.this.getWindow().getDecorView().getRootView().getHeight();
+        int heightDiff = height - r.bottom;
+        return heightDiff > softKeyboardHeight;
+    }
+
 
     @Override
     protected void onResume() {

@@ -1,5 +1,6 @@
 package com.zhongwang.sale.fragment;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -339,6 +341,14 @@ public class FragmentDaily extends FragmentBase {
         });
     }
 
+    private void hideSoftKeyboard() {
+        if (getContext() == null) return;
+        InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+        if (inputMethodManager.isActive()) {
+            inputMethodManager.hideSoftInputFromWindow(view.getApplicationWindowToken(), 0);
+        }
+    }
+
     private void handleUpdata(UpdateDataBean bean, int type) {
         if (bean == null) return;
         if (bean.getCode() != Constants.SUCCEED_CODE) {
@@ -568,8 +578,15 @@ public class FragmentDaily extends FragmentBase {
         initData();
     }
 
-    private void initData() {
+    @Override
+    public void onResume() {
+        super.onResume();
+        view.postDelayed(() -> hideSoftKeyboard(), 200);
 
+        // hideSoftKeyboard();
+    }
+
+    private void initData() {
         boolean isLogin = PreferencesUtils.getBoolean(getContext(), Constants.IS_LOGIN, false);
         if (isLogin) {
             loginData = LoginResult.getLoginDataFromPreference(getContext());
