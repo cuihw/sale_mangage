@@ -32,6 +32,8 @@ import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -63,7 +65,7 @@ public class FragmentDayStatistic extends FragmentBase {
     @BindView(R.id.listview)
     ListView listview;
 
-    Calendar calendar;
+    Calendar calendar = Calendar.getInstance();
 
     LoginResult.GroundData groundData;
 
@@ -73,6 +75,8 @@ public class FragmentDayStatistic extends FragmentBase {
     MultipleLayoutAdapter commonAdapter;
     List<DayStatisticBean.DayStatisticsData> listData;
     private ArrayAdapter<String> adapter;
+
+    String requestRecoder = "";
 
     public static FragmentDayStatistic newInstance() {
         FragmentDayStatistic fragment = new FragmentDayStatistic();
@@ -207,6 +211,9 @@ public class FragmentDayStatistic extends FragmentBase {
     private void initView() {
         commonAdapter = new MultipleLayoutAdapter(getContext(), R.layout.item_daily_query, listData);
         listview.setAdapter(commonAdapter);
+
+        String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
+        datetime.setText(sDate);
     }
 
     private void handleDate(int year, int monthOfYear, int dayOfMonth) {
@@ -218,7 +225,7 @@ public class FragmentDayStatistic extends FragmentBase {
         getDataDailyReport(); // 查询数据
     }
 
-    private void getDataDailyReport() {
+    private synchronized void getDataDailyReport() {
         HwLog.i(TAG, "getDataDailyReport");
         // 类型，场地，时间 去查询
         if (calendar == null) {
@@ -235,9 +242,18 @@ public class FragmentDayStatistic extends FragmentBase {
         params.put("month", month);
         params.put("type", type + 1);
 
+        JSONObject jsonObject = new JSONObject(params);
+        if (requestRecoder.equals(jsonObject)) {
+            HwLog.i(TAG, "request process...");
+            return;
+        }
+        requestRecoder = jsonObject.toString();
+        if (requestRecoder == null) requestRecoder = "";
+
         HttpRequest.postData(getContext(), Constants.DAILY_REQUEST, params, new HttpRequest.RespListener<DayStatisticBean>() {
             @Override
             public void onResponse(int status, DayStatisticBean bean) {
+                if (getContext() == null) return;
                 ToastUtil.showTextToast(getContext(), bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
                     List<DayStatisticBean.DayStatisticsData> data = bean.getData();
@@ -255,12 +271,6 @@ public class FragmentDayStatistic extends FragmentBase {
     private void alertMessage(String s) {
         PopupDialog dialog = PopupDialog.create(getContext(), "警   告", s, "确定", null);
         dialog.show();
-    }
-
-    @Override
-    public void onPause() {
-        calendar = null;
-        super.onPause();
     }
 
     private final class MultipleLayoutAdapter extends CommonAdapter<DayStatisticBean.DayStatisticsData> {

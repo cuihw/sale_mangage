@@ -32,6 +32,8 @@ import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -59,12 +61,13 @@ public class FragmentMonthStatistic extends FragmentBase {
     @BindView(R.id.listview)
     ListView listview;
     LoginResult loginData;
-    private Calendar calendar;
+    private Calendar calendar = Calendar.getInstance();
 
     MultipleLayoutAdapter multiAdapter;
 
     private int type = 0;
     private List<MonthlyStaticData> listData;
+    private String requestRecoder = "";
 
     public static FragmentMonthStatistic newInstance() {
         FragmentMonthStatistic fragment = new FragmentMonthStatistic();
@@ -87,6 +90,8 @@ public class FragmentMonthStatistic extends FragmentBase {
     private void initView() {
         multiAdapter = new MultipleLayoutAdapter(getContext(), R.layout.item_monthly_query, listData);
         listview.setAdapter(multiAdapter);
+        String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
+        datetime.setText(sDate);
     }
 
     private void initListener() {
@@ -155,7 +160,7 @@ public class FragmentMonthStatistic extends FragmentBase {
         getDataMonthlyReport();
     }
 
-    private void getDataMonthlyReport() {
+    private synchronized void getDataMonthlyReport() {
         HwLog.i(TAG, "getDataMonthlyReport");
         // 类型，场地，时间 去查询
         if (calendar == null) {
@@ -179,9 +184,18 @@ public class FragmentMonthStatistic extends FragmentBase {
         params.put("month", month);
         params.put("type", type + 1);
 
+        JSONObject jsonObject = new JSONObject(params);
+        if (requestRecoder.equals(jsonObject)) {
+            HwLog.i(TAG, "request process...");
+            return;
+        }
+        requestRecoder = jsonObject.toString();
+        if (requestRecoder == null) requestRecoder = "";
+
         HttpRequest.postData(getContext(), Constants.MONTH_REQUEST, params, new HttpRequest.RespListener<MonthlyStaticBean>() {
             @Override
             public void onResponse(int status, MonthlyStaticBean bean) {
+                if (getContext() == null) return;
                 ToastUtil.showTextToast(getContext(), bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
                     multiAdapter.replaceAll(new ArrayList<>());
@@ -212,13 +226,6 @@ public class FragmentMonthStatistic extends FragmentBase {
             }
         }
     }
-
-    @Override
-    public void onPause() {
-        calendar = null;
-        super.onPause();
-    }
-
 
     private final class MultipleLayoutAdapter extends CommonAdapter<MonthlyStaticData> {
 

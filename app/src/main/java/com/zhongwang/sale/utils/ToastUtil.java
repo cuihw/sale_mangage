@@ -1,6 +1,7 @@
 package com.zhongwang.sale.utils;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.widget.Toast;
 
 public class ToastUtil {
@@ -12,6 +13,7 @@ public class ToastUtil {
         } else {
             toast.setText(msg);
         }
+        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
 

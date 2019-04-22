@@ -76,8 +76,16 @@ public class FragmentPersonCenter extends FragmentBase {
 
     private void initListener() {
         logout.setOnClickListener(v -> {
-            LoginResult.clearLoginData(getContext());
-            LoginActivity.startActivity(getContext(), null);
+            String s = logout.getText().toString();
+
+            if (s.equals("退出登录")) {
+                logout.setText("登    录");
+                LoginResult.clearLoginData(getContext());
+            } else {
+                logout.setText("退出登录");
+                LoginActivity.startActivity(getContext(), null);
+            }
+
         });
 
         check_version_layout.setOnClickListener(v -> {
@@ -114,15 +122,7 @@ public class FragmentPersonCenter extends FragmentBase {
                         }
                     }).show();
         } else {
-            // ToastUtil.showTextToast(getContext(), "当前已经是最新版本");
-            PopupDialog.create(getContext(), "发现新版本", "更新内容：" + checkVersionInfo.getVersionInfo()
-                            + "\n 点击开始下载",
-                    "下载", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            downloadApkUrl(Constants.UPDATE_URL);
-                        }
-                    }).show();
+            ToastUtil.showTextToast(getContext(), "当前已经是最新版本");
         }
 
     }
@@ -136,6 +136,9 @@ public class FragmentPersonCenter extends FragmentBase {
     private void initView() {
         loginResult = LoginResult.getLoginDataFromPreference(getContext());
         if (loginResult == null) {
+//          LoginActivity.startActivity(getContext(), null);
+            name.setText("用户未登录");
+            logout.setText("登     录");
             LoginActivity.startActivity(getContext(), null);
             return;
         }

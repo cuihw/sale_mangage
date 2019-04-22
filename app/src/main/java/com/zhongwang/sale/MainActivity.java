@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import com.jpeng.jptabbar.JPTabBar;
 import com.jpeng.jptabbar.OnTabSelectListener;
 import com.zhongwang.sale.activity.LoginActivity;
+import com.zhongwang.sale.dialog.PopupDialog;
 import com.zhongwang.sale.fragment.FragmentDaily;
 import com.zhongwang.sale.fragment.FragmentDayStatistic;
 import com.zhongwang.sale.fragment.FragmentMonthStatistic;
@@ -91,18 +92,6 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-
-//        main.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-//            @Override
-//            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-//                InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
-//                if ( inputMethodManager.isActive( ) ) {
-//                    jpTabBar.setVisibility(View.GONE);
-//                } else {
-//                    jpTabBar.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
         setListenerToRootView();
     }
 
@@ -166,6 +155,22 @@ public class MainActivity extends BaseActivity {
             ToastUtil.showTextToast(this, "请登录系统");
             LoginActivity.startActivity(this,null);
         }
+    }
+
+    private void loginActivity() {
+        PopupDialog.create(this, "请登录", "请登录后进行操作"
+                , "登录", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LoginActivity.startActivity(MainActivity.this, null);
+                    }
+                }, "取消", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setTitle("个人中心");
+                        tranToFragment(fragmentPersonCenter);
+                    }
+                });
     }
 
     private void initTab() {
