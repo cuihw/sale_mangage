@@ -133,13 +133,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
                         android:paddingRight="@dimen/item_padding"
-                        android:text="开票块数：" />
+                        android:text="开票数量：" />
 
                     <EditText
                         android:id="@+id/bill_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="（必填）请输入开票块数"
+                        android:hint="（必填）请输入开票数量"
                         android:inputType="number" />
                 </TableRow>
 
@@ -156,7 +156,7 @@
                         android:id="@+id/bill_price"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:hint="（必填）请输入开票单价"
+                        android:hint="默认为单价"
                         android:inputType="numberDecimal" />
                 </TableRow>
 
@@ -207,23 +207,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="请输入回收托盘数"
-                        android:inputType="number" />
-                </TableRow>
-
-                <TableRow android:id="@+id/row_square">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:paddingRight="@dimen/item_padding"
-                        android:text="上报平方：" />
-
-                    <EditText
-                        android:id="@+id/report_square"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:hint="请输入回平方数"
                         android:inputType="number" />
                 </TableRow>
 

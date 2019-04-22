@@ -17,7 +17,6 @@ import com.zhongwang.sale.fragment.FragmentPersonCenter;
 import com.zhongwang.sale.module.LoginResult;
 import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
-import com.zhongwang.sale.utils.ToastUtil;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -120,7 +119,7 @@ public class MainActivity extends BaseActivity {
     private boolean isKeyboardShown(View rootView) {
 //        InputMethodManager inputMethodManager = (InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
 //        return inputMethodManager.isActive();
-        final int softKeyboardHeight = 10;
+        final int softKeyboardHeight = 100;
         Rect r = new Rect();
         rootView.getWindowVisibleDisplayFrame(r);
         // DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
@@ -148,12 +147,10 @@ public class MainActivity extends BaseActivity {
         if (isLogin) {
             loginData = LoginResult.getLoginDataFromPreference(this);
             if (loginData == null) {
-                ToastUtil.showTextToast(this, "请登录系统");
-                LoginActivity.startActivity(this,null);
+                loginActivity();
             }
         } else {
-            ToastUtil.showTextToast(this, "请登录系统");
-            LoginActivity.startActivity(this,null);
+            loginActivity();
         }
     }
 

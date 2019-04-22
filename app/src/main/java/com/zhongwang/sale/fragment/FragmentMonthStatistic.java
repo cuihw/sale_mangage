@@ -167,6 +167,9 @@ public class FragmentMonthStatistic extends FragmentBase {
             ToastUtil.showTextToast(getContext(), "请选择时间");
             return;
         }
+        if (loginData == null) {
+            return;
+        }
         List<LoginResult.GroundData> datas = loginData.getData();
         if (datas == null || datas.size() == 0) {
             ToastUtil.showTextToast(getContext(), "没有工地数据，请联系管理员");

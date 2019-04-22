@@ -120,15 +120,14 @@ public class FragmentDaily extends FragmentBase {
     TableRow row_balance;
     @BindView(R.id.row_happen)
     TableRow row_happen;
-    @BindView(R.id.row_square)
-    TableRow row_square;
-
+//    @BindView(R.id.row_square)
+//    TableRow row_square;
 
     @BindView(R.id.ready_commit)
     LeanTextView ready_commit;
 
-    @BindView(R.id.report_square)
-    EditText report_square;
+//    @BindView(R.id.report_square)
+//    EditText report_square;
 
 
     private LoginResult loginData;
@@ -163,6 +162,8 @@ public class FragmentDaily extends FragmentBase {
         initListener();
         return view;
     }
+
+    boolean isLogin;
 
     private void initListener() {
         tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -207,10 +208,17 @@ public class FragmentDaily extends FragmentBase {
         datetime.setOnClickListener(v -> showDatePicker());
 
         commit_action.setOnClickListener(v -> upLoadDailyReport());
+
         init_data.setOnClickListener(v -> {
+            if (!isLogin) {
+                ToastUtil.showTextToast(getContext(), "请登录后上报数据");
+                return;
+            }
+
             if (groundData != null) {
                 showInitDataDialog();
             } else {
+
                 alertMessage("请选择工地");
             }
         });
@@ -218,25 +226,20 @@ public class FragmentDaily extends FragmentBase {
 
     private void setUiByType(int type) {
         if (type == JIA_QI) {
-            row_ticket0.setVisibility(View.GONE);
-            row_ticket1.setVisibility(View.GONE);
             row_tray0.setVisibility(View.VISIBLE);
             row_tray1.setVisibility(View.VISIBLE);
             row_left_tray.setVisibility(View.VISIBLE);
             row_money.setVisibility(View.VISIBLE);
             row_happen.setVisibility(View.VISIBLE);
-            row_square.setVisibility(View.VISIBLE);
+//            row_square.setVisibility(View.VISIBLE);
 
         } else {
-            row_ticket0.setVisibility(View.VISIBLE);
-            row_ticket1.setVisibility(View.VISIBLE);
             row_tray0.setVisibility(View.GONE);
             row_tray1.setVisibility(View.GONE);
-
             row_left_tray.setVisibility(View.GONE);
             row_money.setVisibility(View.GONE);
             row_happen.setVisibility(View.GONE);
-            row_square.setVisibility(View.GONE);
+//            row_square.setVisibility(View.GONE);
         }
         ready_commit.setVisibility(View.GONE);
         number.setText("");
@@ -251,94 +254,7 @@ public class FragmentDaily extends FragmentBase {
         total_price.setText("0.0");
         balance_money.setText("0.0");
         current_happen.setText("0.0");
-        report_square.setText("");
-    }
-
-    private void upLoadDailyReport() {
-        if (groundData == null) {
-            // 请选择工地
-            alertMessage("请选择工地");
-            return;
-        }
-
-        if (initDataBean == null || initDataBean.getData() == null) {
-            // 上报初期值
-            showInitDataDialog();
-            return;
-        }
-        String numbers = number.getText().toString(); // 数量
-        String unitPrice = price.getText().toString(); // 单价
-        String backMoney = backmoney.getText().toString(); // 回款
-        String sendTrayNumber = send_tray_number.getText().toString(); // 发出托盘数
-        String backTrayNumber = back_tray_number.getText().toString(); // 发出托盘数
-        String remark = remark_tv.getText().toString(); // 发出托盘数
-        String reportSquare = report_square.getText().toString(); // 发出托盘数
-        String billNumber = bill_number.getText().toString();
-        String billPrice = bill_price.getText().toString();
-
-        if (TextUtils.isEmpty(numbers)) {
-            alertMessage("请输入数量");
-            return;
-        }
-        if (TextUtils.isEmpty(unitPrice)) {
-            alertMessage("请输入单价");
-            return;
-        }
-
-        Map<String, Object> params = new HashMap<>();
-        params.put("wid", groundData.getId());
-        params.put("wname", groundData.getName());
-        params.put("out_number", numbers);
-        params.put("price", unitPrice);
-        if (!TextUtils.isEmpty(backMoney)) {
-            params.put("rmoney", backMoney);
-        }
-
-        if (!TextUtils.isEmpty(remark)) {
-            params.put("remark", remark);
-        }
-
-        params.put("uname", loginData.getUsername());
-        String date = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
-        params.put("up_date", date);
-
-
-        String postUrl = Constants.SALES_UPDATE;
-        // check type
-        if (type == JIA_QI) {
-            if (!TextUtils.isEmpty(sendTrayNumber)) {
-                params.put("dsend", sendTrayNumber);
-            }
-            if (!TextUtils.isEmpty(backTrayNumber)) {
-                params.put("drecycling", backTrayNumber);
-            }
-
-            if (!TextUtils.isEmpty(reportSquare)) {
-                params.put("report_square", reportSquare);
-            }
-        } else {
-            postUrl = Constants.SALES_UPDATE_STANDARD;
-            if (!TextUtils.isEmpty(billNumber)) {
-                params.put("billing_number", billNumber);
-            } else {
-                alertMessage("请填写开票数量");
-                return;
-            }
-            if (!TextUtils.isEmpty(billPrice)) {
-                params.put("billing_price", billPrice);
-            } else {
-                alertMessage("请填写开票单价");
-                return;
-            }
-        }
-
-        HttpRequest.postData(getContext(), postUrl, params, new HttpRequest.RespListener<UpdateDataBean>() {
-            @Override
-            public void onResponse(int status, UpdateDataBean bean) {
-                HwLog.i(TAG, bean.getMessage() + ", bean = " + bean.toJson());
-                handleUpdata(bean, type);
-            }
-        });
+        //report_square.setText("");
     }
 
     private void hideSoftKeyboard() {
@@ -519,9 +435,127 @@ public class FragmentDaily extends FragmentBase {
         initDataAlertDialog.show();
     }
 
+    private void upLoadDailyReport() {
+        if (!isLogin) {
+            ToastUtil.showTextToast(getContext(), "请登录后上报数据");
+            return;
+        }
+
+        if (groundData == null) {
+            // 请选择工地
+            alertMessage("请选择工地");
+            return;
+        }
+
+        if (initDataBean == null || initDataBean.getData() == null) {
+            // 上报初期值
+            showInitDataDialog();
+            return;
+        }
+        String numbers = number.getText().toString(); // 数量
+        String unitPrice = price.getText().toString(); // 单价
+        String backMoney = backmoney.getText().toString(); // 回款
+        String sendTrayNumber = send_tray_number.getText().toString(); // 发出托盘数
+        String backTrayNumber = back_tray_number.getText().toString(); // 发出托盘数
+        String remark = remark_tv.getText().toString(); // 发出托盘数
+        //String reportSquare = report_square.getText().toString(); //
+        String billNumber = bill_number.getText().toString();
+        String billPrice = bill_price.getText().toString();
+
+        if (TextUtils.isEmpty(numbers)) {
+            alertMessage("请输入数量");
+            return;
+        }
+        if (TextUtils.isEmpty(unitPrice)) {
+            alertMessage("请输入单价");
+            return;
+        }
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("wid", groundData.getId());
+        params.put("wname", groundData.getName());
+        params.put("out_number", numbers);
+        params.put("price", unitPrice);
+        if (!TextUtils.isEmpty(backMoney)) {
+            params.put("rmoney", backMoney);
+        }
+
+        if (!TextUtils.isEmpty(remark)) {
+            params.put("remark", remark);
+        }
+
+        params.put("uname", loginData.getUsername());
+        String date = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
+        params.put("up_date", date);
+
+
+        String postUrl = Constants.SALES_UPDATE;
+        // check type
+        if (type == JIA_QI) {
+            if (!TextUtils.isEmpty(sendTrayNumber)) {
+                params.put("dsend", sendTrayNumber);
+            }
+            if (!TextUtils.isEmpty(backTrayNumber)) {
+                params.put("drecycling", backTrayNumber);
+            }
+//            if (!TextUtils.isEmpty(reportSquare)) {
+//                params.put("report_square", reportSquare);
+//            }
+        } else {
+            postUrl = Constants.SALES_UPDATE_STANDARD;
+        }
+        if (!TextUtils.isEmpty(billNumber)) {
+            params.put("billing_number", billNumber);
+        } else {
+            alertMessage("请填写开票数量");
+            return;
+        }
+        if (!TextUtils.isEmpty(billPrice)) {
+            params.put("billing_price", billPrice);
+        } else {
+            params.put("billing_price", unitPrice);
+            bill_price.setText(unitPrice + "");
+            return;
+        }
+
+        HttpRequest.postData(getContext(), postUrl, params, new HttpRequest.RespListener<UpdateDataBean>() {
+            @Override
+            public void onResponse(int status, UpdateDataBean bean) {
+                HwLog.i(TAG, bean.getMessage() + ", bean = " + bean.toJson());
+                handleUpdata(bean, type);
+            }
+        });
+    }
+
+    private void alertMessage(String s) {
+        PopupDialog dialog = PopupDialog.create(getContext(), "警   告", s, "确定", null);
+        dialog.show();
+    }
+
+    private String getInitDataKey(String wid, String on_time) {
+        return "Init" + wid + on_time;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        view.postDelayed(() -> hideSoftKeyboard(), 200);
+
+        // hideSoftKeyboard();
+    }
 
     // 上传初期数
     private void uploadInitData(String init_money, String init_tray) {
+        if (!isLogin) {
+            ToastUtil.showTextToast(getContext(), "请登录后上报数据");
+            return;
+        }
         if (TextUtils.isEmpty(init_money)) {
             alertMessage("初期金额为空，不能上传");
             return;
@@ -563,31 +597,8 @@ public class FragmentDaily extends FragmentBase {
         });
     }
 
-    private void alertMessage(String s) {
-        PopupDialog dialog = PopupDialog.create(getContext(), "警   告", s, "确定", null);
-        dialog.show();
-    }
-
-    private String getInitDataKey(String wid, String on_time) {
-        return "Init" + wid + on_time;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        initData();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        view.postDelayed(() -> hideSoftKeyboard(), 200);
-
-        // hideSoftKeyboard();
-    }
-
     private void initData() {
-        boolean isLogin = PreferencesUtils.getBoolean(getContext(), Constants.IS_LOGIN, false);
+        isLogin = PreferencesUtils.getBoolean(getContext(), Constants.IS_LOGIN, false);
         if (isLogin) {
             loginData = LoginResult.getLoginDataFromPreference(getContext());
             if (loginData == null) {
@@ -605,6 +616,8 @@ public class FragmentDaily extends FragmentBase {
                         "这个用户负责的工地数据为不正确，请联系管理员", "确定",
                         null).show();
             }
+        } else {
+            ToastUtil.showTextToast(getContext(), "请先登录，然后再进行操作");
         }
     }
 
@@ -616,8 +629,6 @@ public class FragmentDaily extends FragmentBase {
         String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
         datetime.setText(sDate);
         init_data.setSelected(true);
-        row_ticket0.setVisibility(View.GONE);
-        row_ticket1.setVisibility(View.GONE);
         row_tray0.setVisibility(View.VISIBLE);
         row_tray1.setVisibility(View.VISIBLE);
     }

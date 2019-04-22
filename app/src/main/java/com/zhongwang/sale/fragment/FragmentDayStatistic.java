@@ -232,6 +232,12 @@ public class FragmentDayStatistic extends FragmentBase {
             ToastUtil.showTextToast(getContext(), "请选择时间");
             return;
         }
+
+        if (loginData == null) {
+            ToastUtil.showTextToast(getContext(), "请登录后查看数据");
+            return;
+        }
+
         if (groundData == null) {
             ToastUtil.showTextToast(getContext(), "工地选择错误");
             return;

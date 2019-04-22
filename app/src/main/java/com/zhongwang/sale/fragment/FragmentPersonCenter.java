@@ -27,6 +27,7 @@ import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PackageUtils;
 import com.zhongwang.sale.utils.ToastUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -139,7 +140,7 @@ public class FragmentPersonCenter extends FragmentBase {
 //          LoginActivity.startActivity(getContext(), null);
             name.setText("用户未登录");
             logout.setText("登     录");
-            LoginActivity.startActivity(getContext(), null);
+            if (adapter != null) adapter.replaceAll(new ArrayList<>());
             return;
         }
         name.setText("用户名：" + loginResult.getUsername());
@@ -151,7 +152,6 @@ public class FragmentPersonCenter extends FragmentBase {
     private void initListview() {
         loginResult = LoginResult.getLoginDataFromPreference(getContext());
         if (loginResult == null) {
-            LoginActivity.startActivity(getContext(), null);
             return;
         }
         dataList = loginResult.getData(); // 工地数据
