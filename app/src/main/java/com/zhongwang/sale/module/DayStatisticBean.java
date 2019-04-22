@@ -1,7 +1,5 @@
 package com.zhongwang.sale.module;
 
-import android.text.TextUtils;
-
 import java.util.List;
 
 public class DayStatisticBean extends Bean {
@@ -55,8 +53,18 @@ public class DayStatisticBean extends Bean {
 
         private String billing_price;
 
+        private int type = 0;
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
         public boolean isJiaQi() {
-            return TextUtils.isEmpty(billing_number);
+            return type == 0;
         }
 
         public String getBilling_number() {

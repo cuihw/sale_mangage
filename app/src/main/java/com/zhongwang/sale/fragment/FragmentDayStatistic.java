@@ -262,13 +262,16 @@ public class FragmentDayStatistic extends FragmentBase {
                 if (getContext() == null) return;
                 ToastUtil.showTextToast(getContext(), bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
-                    List<DayStatisticBean.DayStatisticsData> data = bean.getData();
-                    if (data == null || data.size() == 0) {
+                    List<DayStatisticBean.DayStatisticsData> datas = bean.getData();
+                    if (datas == null || datas.size() == 0) {
                         ToastUtil.showTextToast(getContext(), "本月还没有数据上传");
                         commonAdapter.replaceAll(new ArrayList<>());
                         return;
                     }
-                    commonAdapter.replaceAll(data);
+                    for (DayStatisticBean.DayStatisticsData data : datas) {
+                        data.setType(type);
+                    }
+                    commonAdapter.replaceAll(datas);
                 }
             }
         });
@@ -304,19 +307,18 @@ public class FragmentDayStatistic extends FragmentBase {
             helper.setText(R.id.number3, "" + item.getPrice());  // 价格
             helper.setText(R.id.number, "" + item.getRmoney()); // 回款金额
             helper.setText(R.id.number12, item.getRemark()); // 备注
+            helper.setText(R.id.number4, "" + item.getBilling_number()); // 开票数量
+            helper.setText(R.id.number5, "" + item.getBilling_price()); // 开票价格
 
             if (item.isJiaQi()) {
                 helper.setText(R.id.number1, "" + item.getDsend()); // 当日发出托盘
-                helper.setText(R.id.number4, "" + item.getDrecycling()); // 当日回收托盘
-                helper.setText(R.id.number5, "" + item.getDresidue()); // 当日剩余托盘
+                helper.setText(R.id.number13, "" + item.getDrecycling()); // 当日回收托盘
+                helper.setText(R.id.number14, "" + item.getDresidue()); // 当日剩余托盘
                 helper.setText(R.id.number6, "" + item.getDmoney()); // 当日金额
                 helper.setText(R.id.number7, "" + item.getDbalance()); // 当日余款
                 helper.setText(R.id.number8, "" + item.getDmoney2()); // 当日发生金额
-                helper.setText(R.id.number9, "" + item.getReport_square()); // 上报平方
             } else {
                 helper.setText(R.id.number1, "" + item.getDbalance()); // 当日余款
-                helper.setText(R.id.number4, "" + item.getBilling_number()); // 开票数量
-                helper.setText(R.id.number5, "" + item.getBilling_price()); // 开票价格
             }
         }
     }

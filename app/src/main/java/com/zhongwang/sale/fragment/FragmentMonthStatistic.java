@@ -256,18 +256,17 @@ public class FragmentMonthStatistic extends FragmentBase {
             helper.setText(R.id.number, "" + item.getRmoney()); // 回款金额
             helper.setText(R.id.number1, "" + item.getDmoney()); // 销售金额
             helper.setText(R.id.number4, "" + item.getDbalance()); // 余款
+            helper.setText(R.id.number6, "" + item.getBilling_number()); // 开票数量
+            helper.setText(R.id.number7, "" + item.getBilling_dmoney()); // 开票总金额
 
             if (item.isJiaQi()) {
                 helper.setText(R.id.number5, "" + item.getInit_money()); // 初期金额
-                helper.setText(R.id.number6, "" + item.getDsend()); // 发出托盘
-                helper.setText(R.id.number7, "" + item.getDrecycling()); // 回收托盘
+                helper.setText(R.id.number10, "" + item.getDsend()); // 发出托盘
+                helper.setText(R.id.number11, "" + item.getDrecycling()); // 回收托盘
                 helper.setText(R.id.number8, "" + item.getDresidue()); // 剩余托盘
                 helper.setText(R.id.number9, "" + item.getInit_tray()); // 初期托盘数
-                helper.setText(R.id.number10, "" + item.getInit_tray()); // 上报平方
             } else {
                 helper.setText(R.id.number5, "" + item.getBilling_price()); // 开票价格
-                helper.setText(R.id.number6, "" + item.getBilling_number()); // 开票数量
-                helper.setText(R.id.number6, "" + item.getBilling_dmoney()); // 开票总金额
             }
         }
     }
