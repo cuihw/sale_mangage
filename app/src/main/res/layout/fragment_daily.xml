@@ -59,14 +59,14 @@
 
     <com.zhongwang.sale.view.LeanTextView
         android:id="@+id/ready_commit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/scrollview"
-        android:gravity="center"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_alignTop="@+id/option_layout"
+        android:layout_centerHorizontal="true"
         android:text="已提交"
         android:textColor="@color/redtrans"
         android:textSize="80sp"
-        app:degree="20dp" />
+        app:degree="10dp" />
 
     <ScrollView
         android:id="@+id/scrollview"

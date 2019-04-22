@@ -435,7 +435,8 @@ public class FragmentDaily extends FragmentBase {
         initDataAlertDialog.show();
     }
 
-    private void upLoadDailyReport() {
+    private synchronized void upLoadDailyReport() {
+
         if (!isLogin) {
             ToastUtil.showTextToast(getContext(), "请登录后上报数据");
             return;
@@ -518,11 +519,14 @@ public class FragmentDaily extends FragmentBase {
             return;
         }
 
+        commit_action.setClickable(false);
         HttpRequest.postData(getContext(), postUrl, params, new HttpRequest.RespListener<UpdateDataBean>() {
             @Override
             public void onResponse(int status, UpdateDataBean bean) {
                 HwLog.i(TAG, bean.getMessage() + ", bean = " + bean.toJson());
                 handleUpdata(bean, type);
+
+                commit_action.setClickable(true);
             }
         });
     }
