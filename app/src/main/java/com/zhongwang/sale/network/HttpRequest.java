@@ -36,11 +36,11 @@ public class HttpRequest {
         builder = okHttpclient.newBuilder();
 
         // 全局的读取超时时间
-        builder.readTimeout(10000, TimeUnit.MILLISECONDS);
+        builder.readTimeout(5000, TimeUnit.MILLISECONDS);
         // 全局的写入超时时间
-        builder.writeTimeout(10000, TimeUnit.MILLISECONDS);
+        builder.writeTimeout(5000, TimeUnit.MILLISECONDS);
         // 全局的连接超时时间
-        builder.connectTimeout(10000, TimeUnit.MILLISECONDS);
+        builder.connectTimeout(5000, TimeUnit.MILLISECONDS);
         builder.cookieJar(new CookieJarImpl(new MemoryCookieStore()));
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor("CHRIS");
         // log打印级别，决定了log显示的详细程度
@@ -51,8 +51,7 @@ public class HttpRequest {
         //if (BuildConfig.DEBUG)
         builder.addInterceptor(loggingInterceptor);
 
-        OkGo.getInstance().init(appContext)
-                .setOkHttpClient(builder.build());
+        OkGo.getInstance().init(appContext).setOkHttpClient(builder.build());
     }
 
     // 接口的使用：
@@ -111,8 +110,7 @@ public class HttpRequest {
                         T data = new Gson().fromJson(body, clz);
                         listener.onResponse(0, data);
                     } else  {
-                        T data = clz.newInstance();
-                        listener.onResponse(0, data);
+                        listener.onResponse(0, body);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

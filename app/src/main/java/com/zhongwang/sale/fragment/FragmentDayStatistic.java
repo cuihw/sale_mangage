@@ -26,6 +26,7 @@ import com.zhongwang.sale.R;
 import com.zhongwang.sale.dialog.PopupDialog;
 import com.zhongwang.sale.module.DayStatisticBean;
 import com.zhongwang.sale.module.LoginResult;
+import com.zhongwang.sale.module.WorkSiteData;
 import com.zhongwang.sale.network.HttpRequest;
 import com.zhongwang.sale.utils.DateUtils;
 import com.zhongwang.sale.utils.HwLog;
@@ -67,7 +68,7 @@ public class FragmentDayStatistic extends FragmentBase {
 
     Calendar calendar = Calendar.getInstance();
 
-    LoginResult.GroundData groundData;
+    WorkSiteData groundData;
 
     int type = 0;
 
@@ -95,6 +96,8 @@ public class FragmentDayStatistic extends FragmentBase {
         return view;
     }
 
+    DayStatisticBean dayStatisticBean;
+
     private void initData() {
         boolean isLogin = PreferencesUtils.getBoolean(getContext(), Constants.IS_LOGIN, false);
         if (isLogin) {
@@ -106,7 +109,7 @@ public class FragmentDayStatistic extends FragmentBase {
                 return;
             }
 
-            List<LoginResult.GroundData> datas = loginData.getData();
+            List<WorkSiteData> datas = loginData.getData().getResponsible();
             if (datas != null && datas.size() > 0) {
                 initSpinner(datas);
                 groundData = datas.get(0);
@@ -118,9 +121,9 @@ public class FragmentDayStatistic extends FragmentBase {
         }
     }
 
-    private void initSpinner(List<LoginResult.GroundData> datas) {
+    private void initSpinner(List<WorkSiteData> datas) {
         List<String> spinerItems = new ArrayList<>();
-        for (LoginResult.GroundData data : datas) {
+        for (WorkSiteData data : datas) {
             spinerItems.add(data.getName());
         }
 
@@ -128,42 +131,6 @@ public class FragmentDayStatistic extends FragmentBase {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // 加载适配器
         spinner2.setAdapter(adapter);
-    }
-
-    private void initListener() {
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                type = position;
-                HwLog.i(TAG, "type = " + type);
-                getDataDailyReport();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String str = parent.getItemAtPosition(position).toString();
-                HwLog.i(TAG, "spinner id = " + id + ", str = " + str);
-                for (LoginResult.GroundData data : loginData.getData()) {
-                    if (data.getName().equals(str)) {
-                        groundData = data;
-                        break;
-                    }
-                }
-                getDataDailyReport();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-        datetime.setOnClickListener(v -> showDatePicker());
     }
 
     private void showDatePicker() {
@@ -208,12 +175,40 @@ public class FragmentDayStatistic extends FragmentBase {
         dlg.show();
     }
 
-    private void initView() {
-        commonAdapter = new MultipleLayoutAdapter(getContext(), R.layout.item_daily_query, listData);
-        listview.setAdapter(commonAdapter);
+    private void initListener() {
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                type = position;
+                HwLog.i(TAG, "type = " + type);
+                getDataDailyReport();
+            }
 
-        String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
-        datetime.setText(sDate);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String str = parent.getItemAtPosition(position).toString();
+                HwLog.i(TAG, "spinner id = " + id + ", str = " + str);
+                for (WorkSiteData data : loginData.getData().getResponsible()) {
+                    if (data.getName().equals(str)) {
+                        groundData = data;
+                        break;
+                    }
+                }
+                getDataDailyReport();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        datetime.setOnClickListener(v -> showDatePicker());
     }
 
     private void handleDate(int year, int monthOfYear, int dayOfMonth) {
@@ -223,6 +218,16 @@ public class FragmentDayStatistic extends FragmentBase {
         String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
         datetime.setText(sDate);
         getDataDailyReport(); // 查询数据
+    }
+
+    private void initView() {
+        commonAdapter = new MultipleLayoutAdapter(getContext(), R.layout.item_daily_query, listData);
+        listview.setAdapter(commonAdapter);
+
+        String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
+        datetime.setText(sDate);
+
+        handleDayBean(dayStatisticBean);
     }
 
     private synchronized void getDataDailyReport() {
@@ -249,7 +254,7 @@ public class FragmentDayStatistic extends FragmentBase {
         params.put("type", type + 1);
 
         JSONObject jsonObject = new JSONObject(params);
-        if (requestRecoder.equals(jsonObject)) {
+        if (requestRecoder.equals(jsonObject.toString())) {
             HwLog.i(TAG, "request process...");
             return;
         }
@@ -260,21 +265,36 @@ public class FragmentDayStatistic extends FragmentBase {
             @Override
             public void onResponse(int status, DayStatisticBean bean) {
                 if (getContext() == null) return;
-                ToastUtil.showTextToast(getContext(), bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
-                    List<DayStatisticBean.DayStatisticsData> datas = bean.getData();
-                    if (datas == null || datas.size() == 0) {
-                        ToastUtil.showTextToast(getContext(), "本月还没有数据上传");
-                        commonAdapter.replaceAll(new ArrayList<>());
-                        return;
-                    }
-                    for (DayStatisticBean.DayStatisticsData data : datas) {
-                        data.setType(type);
-                    }
-                    commonAdapter.replaceAll(datas);
+                    handleDayBean(bean);
+
+
+                } else {
+
+                    ToastUtil.showTextToast(getContext(), bean.getMessage());
                 }
             }
         });
+    }
+
+    private void handleDayBean(DayStatisticBean bean) {
+        if (bean == null) {
+            commonAdapter.replaceAll(new ArrayList<>());
+            return;
+        }
+
+        dayStatisticBean = bean;
+
+        List<DayStatisticBean.DayStatisticsData> datas = bean.getData();
+        if (datas == null || datas.size() == 0) {
+            ToastUtil.showTextToast(getContext(), "本月还没有数据上传");
+            commonAdapter.replaceAll(new ArrayList<>());
+            return;
+        }
+        for (DayStatisticBean.DayStatisticsData data : datas) {
+            data.setType(type);
+        }
+        commonAdapter.replaceAll(datas);
     }
 
     private void alertMessage(String s) {
@@ -322,4 +342,5 @@ public class FragmentDayStatistic extends FragmentBase {
             }
         }
     }
+
 }

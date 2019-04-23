@@ -20,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
 import com.zhongwang.sale.R;
 
 import java.lang.reflect.Method;
@@ -54,7 +53,7 @@ public class PopupDialog extends AlertDialog {
         setCancelable(cancelable);
         setCanceledOnTouchOutside(canceledOnTouchOutside);
         LayoutInflater inflater = LayoutInflater.from(this.context);
-        view = inflater.inflate(R.layout.popup_dialog, null);
+        view = inflater.inflate(R.layout.dialog_popup, null);
         initView();
     }
 

@@ -29,6 +29,7 @@ import com.zhongwang.sale.module.Bean;
 import com.zhongwang.sale.module.InitDataBean;
 import com.zhongwang.sale.module.LoginResult;
 import com.zhongwang.sale.module.UpdateDataBean;
+import com.zhongwang.sale.module.WorkSiteData;
 import com.zhongwang.sale.network.HttpRequest;
 import com.zhongwang.sale.utils.DateUtils;
 import com.zhongwang.sale.utils.HwLog;
@@ -132,7 +133,7 @@ public class FragmentDaily extends FragmentBase {
 
     private LoginResult loginData;
 
-    private LoginResult.GroundData groundData;
+    private WorkSiteData groundData;
 
     private int type = JIA_QI;
 
@@ -188,7 +189,7 @@ public class FragmentDaily extends FragmentBase {
                 groundData = null;
                 String str = parent.getItemAtPosition(position).toString();
                 HwLog.i(TAG, "spinner id = " + id + ", str = " + str);
-                for (LoginResult.GroundData data : loginData.getData()) {
+                for (WorkSiteData data : loginData.getData().getResponsible()) {
                     if (data.getName().equals(str)) {
                         groundData = data;
                         break;
@@ -395,7 +396,7 @@ public class FragmentDaily extends FragmentBase {
     private void showInitDataDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.Dialog_Common);
         // 获取布局
-        View view2 = View.inflate(getContext(), R.layout.initdata_dialog, null);
+        View view2 = View.inflate(getContext(), R.layout.dialog_initdata, null);
         // 获取布局中的控件
         final EditText init_money = view2.findViewById(R.id.init_money);
         final EditText init_tray = view2.findViewById(R.id.init_tray);
@@ -485,7 +486,7 @@ public class FragmentDaily extends FragmentBase {
             params.put("remark", remark);
         }
 
-        params.put("uname", loginData.getUsername());
+        params.put("uname", loginData.getData().getInfo().getName());
         String date = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMMDD);
         params.put("up_date", date);
 
@@ -612,7 +613,7 @@ public class FragmentDaily extends FragmentBase {
                 return;
             }
 
-            List<LoginResult.GroundData> data = loginData.getData();
+            List<WorkSiteData> data = loginData.getData().getResponsible();
             if (data != null && data.size() > 0) {
                 initSpinner(data);
             } else {
@@ -637,14 +638,14 @@ public class FragmentDaily extends FragmentBase {
         row_tray1.setVisibility(View.VISIBLE);
     }
 
-    private void initSpinner(List<LoginResult.GroundData> datas) {
+    private void initSpinner(List<WorkSiteData> datas) {
         List<String> spinerItems = new ArrayList<>();
         if (datas.size() == 1) {
             spinerItems.add(datas.get(0).getName());
             groundData = datas.get(0);
         } else {
             spinerItems.add("请选择工地");
-            for (LoginResult.GroundData data : datas) {
+            for (WorkSiteData data : datas) {
                 spinerItems.add(data.getName());
             }
         }

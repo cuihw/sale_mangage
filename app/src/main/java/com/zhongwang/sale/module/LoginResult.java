@@ -10,48 +10,35 @@ import com.zhongwang.sale.utils.PreferencesUtils;
 import java.util.List;
 
 public class LoginResult extends Bean{
-    private String username;
 
-    private List<GroundData> data;
+    private Data data;
 
-    public String getUsername() {
-        return username;
-    }
-
-    public List<GroundData> getData() {
+    public Data getData() {
         return data;
     }
 
-    public void setData(List<GroundData> data) {
+    public void setData(Data data) {
         this.data = data;
     }
 
-    public static class GroundData {
-        String id;
-        String name;
-        String contract_price;
+    public static class Data {
+        private List<WorkSiteData> responsible;
+        private UserInfo info;
 
-        public String getContract_price() {
-            return contract_price;
+        public List<WorkSiteData> getResponsible() {
+            return responsible;
         }
 
-        public void setContract_price(String contract_price) {
-            this.contract_price = contract_price;
-        }
-        public String getId() {
-            return id;
+        public void setResponsible(List<WorkSiteData> responsible) {
+            this.responsible = responsible;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public UserInfo getInfo() {
+            return info;
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
+        public void setInfo(UserInfo info) {
+            this.info = info;
         }
     }
 
@@ -66,10 +53,6 @@ public class LoginResult extends Bean{
         } else {
             return fromJson(stringData);
         }
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public static void clearLoginData(Context context) {

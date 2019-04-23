@@ -26,6 +26,7 @@ import com.zhongwang.sale.dialog.PopupDialog;
 import com.zhongwang.sale.module.LoginResult;
 import com.zhongwang.sale.module.MonthlyStaticBean;
 import com.zhongwang.sale.module.MonthlyStaticData;
+import com.zhongwang.sale.module.WorkSiteData;
 import com.zhongwang.sale.network.HttpRequest;
 import com.zhongwang.sale.utils.DateUtils;
 import com.zhongwang.sale.utils.HwLog;
@@ -69,6 +70,8 @@ public class FragmentMonthStatistic extends FragmentBase {
     private List<MonthlyStaticData> listData;
     private String requestRecoder = "";
 
+    MonthlyStaticBean monthlyStaticBean;
+
     public static FragmentMonthStatistic newInstance() {
         FragmentMonthStatistic fragment = new FragmentMonthStatistic();
         return fragment;
@@ -83,7 +86,6 @@ public class FragmentMonthStatistic extends FragmentBase {
         initListener();
         initView();
         initData();
-
         return view;
     }
 
@@ -92,6 +94,7 @@ public class FragmentMonthStatistic extends FragmentBase {
         listview.setAdapter(multiAdapter);
         String sDate = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
         datetime.setText(sDate);
+        handleMonthlyBean(monthlyStaticBean);
     }
 
     private void initListener() {
@@ -170,13 +173,13 @@ public class FragmentMonthStatistic extends FragmentBase {
         if (loginData == null) {
             return;
         }
-        List<LoginResult.GroundData> datas = loginData.getData();
+        List<WorkSiteData> datas = loginData.getData().getResponsible();
         if (datas == null || datas.size() == 0) {
             ToastUtil.showTextToast(getContext(), "没有工地数据，请联系管理员");
             return;
         }
         String ids = "";
-        for (LoginResult.GroundData data : datas) {
+        for (WorkSiteData data : datas) {
             ids = ids + data.getId() + ",";
         }
         ids = ids.substring(0, (ids.length()) - 1);
@@ -188,7 +191,7 @@ public class FragmentMonthStatistic extends FragmentBase {
         params.put("type", type + 1);
 
         JSONObject jsonObject = new JSONObject(params);
-        if (requestRecoder.equals(jsonObject)) {
+        if (requestRecoder.equals(jsonObject.toString())) {
             HwLog.i(TAG, "request process...");
             return;
         }
@@ -199,22 +202,31 @@ public class FragmentMonthStatistic extends FragmentBase {
             @Override
             public void onResponse(int status, MonthlyStaticBean bean) {
                 if (getContext() == null) return;
-                ToastUtil.showTextToast(getContext(), bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
-                    multiAdapter.replaceAll(new ArrayList<>());
-                    List<MonthlyStaticData> data = bean.getData();
-                    if (data == null || data.size() == 0) {
-                        multiAdapter.replaceAll(new ArrayList<>());
-                        ToastUtil.showTextToast(getContext(), bean.getMessage());
-                        return;
-                    }
-                    multiAdapter.replaceAll(data);
+
+                    handleMonthlyBean(bean);
                 } else {
                     multiAdapter.replaceAll(new ArrayList<>());
+                    ToastUtil.showTextToast(getContext(), bean.getMessage());
                 }
             }
         });
+    }
 
+    private void handleMonthlyBean(MonthlyStaticBean bean) {
+        if (bean == null) {
+            multiAdapter.replaceAll(new ArrayList<>());
+            return;
+        }
+        monthlyStaticBean = bean;
+
+        List<MonthlyStaticData> data = bean.getData();
+        if (data == null || data.size() == 0) {
+            multiAdapter.replaceAll(new ArrayList<>());
+            ToastUtil.showTextToast(getContext(), bean.getMessage());
+            return;
+        }
+        multiAdapter.replaceAll(data);
     }
 
     private void initData() {

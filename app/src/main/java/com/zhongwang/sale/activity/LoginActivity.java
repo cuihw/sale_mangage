@@ -73,7 +73,6 @@ public class LoginActivity extends BaseActivity {
             public void onResponse(int status, LoginResult bean) {
                 ToastUtil.showTextToast(LoginActivity.this, bean.getMessage());
                 if (bean.getCode() == Constants.SUCCEED_CODE){
-                    bean.setUsername(username);
                     loginSucceed(bean);
                 } else {
                     HwLog.i(TAG, "request code: " + bean.getCode());
