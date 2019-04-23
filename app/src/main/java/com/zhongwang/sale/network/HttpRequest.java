@@ -51,7 +51,8 @@ public class HttpRequest {
         //if (BuildConfig.DEBUG)
         builder.addInterceptor(loggingInterceptor);
 
-        OkGo.getInstance().init(appContext).setOkHttpClient(builder.build());
+        OkGo.getInstance().init(appContext)
+                .setOkHttpClient(builder.build());
     }
 
     // 接口的使用：
@@ -110,7 +111,8 @@ public class HttpRequest {
                         T data = new Gson().fromJson(body, clz);
                         listener.onResponse(0, data);
                     } else  {
-                        listener.onResponse(0, body);
+                        T data = clz.newInstance();
+                        listener.onResponse(0, data);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
