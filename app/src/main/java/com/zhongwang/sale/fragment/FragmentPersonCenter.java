@@ -123,7 +123,6 @@ public class FragmentPersonCenter extends FragmentBase {
         } else {
             ToastUtil.showTextToast(getContext(), "当前已经是最新版本");
         }
-
     }
 
     @Override
@@ -193,8 +192,8 @@ public class FragmentPersonCenter extends FragmentBase {
         adapter = new CommonAdapter<WorkSiteData>(getContext(), R.layout.item_personal_ground, dataList) {
             @Override
             public void onUpdate(BaseAdapterHelper helper, WorkSiteData item, int position) {
-                helper.setText(R.id.wid, "工地名字：" + item.getName());
-                helper.setText(R.id.wname, "合同价格：" + item.getContract_price());
+                helper.setText(R.id.wid, "工地名字:" + item.getName());
+                helper.setText(R.id.wname, "合同价:" + item.getContract_price());
             }
         };
         listview.setAdapter(adapter);
@@ -243,6 +242,8 @@ public class FragmentPersonCenter extends FragmentBase {
 
         Map<String, Object> params = new HashMap<>();
 
+        priceString = transform2Decimal(priceString);
+
         params.put("name", nameString);
         params.put("contract_price", priceString);
         params.put("uid", loginResult.getData().getInfo().getId());
@@ -273,6 +274,21 @@ public class FragmentPersonCenter extends FragmentBase {
                 }
             }
         });
+    }
+
+    private String transform2Decimal(String priceString) {
+        if (!priceString.contains(".")) {
+            return priceString + ".00";
+        } else {
+            int end = priceString.lastIndexOf(".");
+            int length = priceString.length();
+            if (end == length - 1) {
+                return priceString + "00";
+            } else if (end == length - 2) {
+                return priceString + "0";
+            }
+        }
+        return priceString;
     }
 
     private void handleWorkSite(WorkSiteData data) {

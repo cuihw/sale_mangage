@@ -1,7 +1,5 @@
 package com.zhongwang.sale.module;
 
-import android.text.TextUtils;
-
 public class MonthlyStaticData {
     private String wid;
 
@@ -38,6 +36,16 @@ public class MonthlyStaticData {
     private String billing_number;
 
     private String billing_dmoney;
+
+    private int type = 0;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getWid() {
         return wid;
@@ -184,6 +192,6 @@ public class MonthlyStaticData {
     }
 
     public boolean isJiaQi() {
-        return TextUtils.isEmpty(billing_number);
+        return type == 0;
     }
 }

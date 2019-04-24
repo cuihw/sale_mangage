@@ -111,8 +111,7 @@ public class HttpRequest {
                         T data = new Gson().fromJson(body, clz);
                         listener.onResponse(0, data);
                     } else  {
-                        T data = clz.newInstance();
-                        listener.onResponse(0, data);
+                        listener.onResponse(0, body);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
