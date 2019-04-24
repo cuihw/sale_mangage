@@ -17,6 +17,7 @@
     <color name="font5">#666666</color>
     <!-- 6级文字-->
     <color name="font6">#232323 </color>
+    <color name="font7">#00F</color>
 
     <color name="redtrans">#12ea3021</color>
     <color name="PrimaryRed">#ea3021</color>

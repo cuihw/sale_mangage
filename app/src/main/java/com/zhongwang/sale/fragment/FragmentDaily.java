@@ -148,6 +148,8 @@ public class FragmentDaily extends FragmentBase {
     private UpdateDataBean jiaqiBean;  // 加气
     private UpdateDataBean biaozhuanBean; // 标砖
 
+    private Map<String, InitDataBean> initDataMap = new HashMap<>();
+
     public static FragmentDaily newInstance() {
         FragmentDaily fragment = new FragmentDaily();
         return fragment;
@@ -157,7 +159,7 @@ public class FragmentDaily extends FragmentBase {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         HwLog.i(TAG, "onCreateView");
-        view  = inflater.inflate(R.layout.fragment_daily, container, false);
+        view = inflater.inflate(R.layout.fragment_daily, container, false);
         bindButterKnife(view);
         initView();
         initListener();
@@ -333,16 +335,14 @@ public class FragmentDaily extends FragmentBase {
         }
         String month = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
         String initDataKey = getInitDataKey(groundData.getId(), month);
-        String init = PreferencesUtils.getString(getContext(), initDataKey, null);
 
-        if (!TextUtils.isEmpty(init)) {
-            initDataBean = InitDataBean.fromJson(init);
-            InitDataBean.InitData data = initDataBean.getData();
-            if (data != null) {
-                // 已经得到，不再去请求。
-                showInitData(initDataBean);
-            }
+        initDataBean = initDataMap.get(initDataKey);
+        InitDataBean.InitData data = this.initDataBean.getData();
+        if (data != null) {
+            // 已经得到，不再去请求。
+            showInitData(this.initDataBean);
         }
+
 
         Map<String, Object> params = new HashMap<>();
         params.put("wid", groundData.getId());
@@ -383,6 +383,8 @@ public class FragmentDaily extends FragmentBase {
         showInitData(bean);
 
         if (bean == null) return;
+
+
         InitDataBean.InitData data = bean.getData();
         if (data == null) {
             // TODO: upload init data. init money and tray. dialog
@@ -390,7 +392,7 @@ public class FragmentDaily extends FragmentBase {
             return;
         }
         String key = getInitDataKey(data.getWid(), data.getOn_time());
-        PreferencesUtils.putString(getContext(), key, bean.toJson());
+        initDataMap.put(key, bean);
     }
 
     private void showInitDataDialog() {

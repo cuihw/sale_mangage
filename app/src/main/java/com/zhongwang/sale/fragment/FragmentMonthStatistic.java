@@ -203,7 +203,6 @@ public class FragmentMonthStatistic extends FragmentBase {
             public void onResponse(int status, MonthlyStaticBean bean) {
                 if (getContext() == null) return;
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
-
                     handleMonthlyBean(bean);
                 } else {
                     multiAdapter.replaceAll(new ArrayList<>());
@@ -221,12 +220,18 @@ public class FragmentMonthStatistic extends FragmentBase {
         monthlyStaticBean = bean;
 
         List<MonthlyStaticData> data = bean.getData();
+        for (MonthlyStaticData item : data) {
+            item.setType(type);
+        }
+
         if (data == null || data.size() == 0) {
             multiAdapter.replaceAll(new ArrayList<>());
             ToastUtil.showTextToast(getContext(), bean.getMessage());
             return;
         }
         multiAdapter.replaceAll(data);
+
+
     }
 
     private void initData() {
