@@ -145,9 +145,6 @@ public class FragmentDaily extends FragmentBase {
 
     private InitDataBean initDataBean; // 初期值
 
-    private UpdateDataBean jiaqiBean;  // 加气
-    private UpdateDataBean biaozhuanBean; // 标砖
-
     private Map<String, InitDataBean> initDataMap = new HashMap<>();
 
     public static FragmentDaily newInstance() {
@@ -329,18 +326,23 @@ public class FragmentDaily extends FragmentBase {
     }
 
     private void getInitDataMonth(Calendar calendar) {
+        if (!isLogin) {
+            return;
+        }
         if (groundData == null) {
             ToastUtil.showTextToast(getContext(), "请选择工地");
             return;
         }
+
         String month = DateUtils.formatDateByFormat(calendar, DateUtils.fmtYYYYMM);
         String initDataKey = getInitDataKey(groundData.getId(), month);
 
         initDataBean = initDataMap.get(initDataKey);
-        InitDataBean.InitData data = this.initDataBean.getData();
-        if (data != null) {
-            // 已经得到，不再去请求。
-            showInitData(this.initDataBean);
+        if (initDataBean != null) {
+            InitDataBean.InitData data = initDataBean.getData();
+            if (data != null) {
+                showInitData(this.initDataBean);
+            }
         }
 
 
