@@ -521,6 +521,10 @@ public class FragmentDaily extends FragmentBase {
             return;
         }
         if (!TextUtils.isEmpty(billPrice)) {
+            if (!Utils.checkPrice(billPrice)) {
+                alertMessage("开票单价小数点后不能大于两位小数");
+                return;
+            }
             params.put("billing_price", billPrice);
         } else {
             params.put("billing_price", unitPrice);
