@@ -35,6 +35,7 @@ import com.zhongwang.sale.utils.DateUtils;
 import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
+import com.zhongwang.sale.utils.Utils;
 import com.zhongwang.sale.view.LeanTextView;
 
 import java.util.ArrayList;
@@ -472,8 +473,14 @@ public class FragmentDaily extends FragmentBase {
             alertMessage("请输入数量");
             return;
         }
+
         if (TextUtils.isEmpty(unitPrice)) {
             alertMessage("请输入单价");
+            return;
+        }
+
+        if (!Utils.checkPrice(unitPrice)) {
+            alertMessage("单价小数点后最多两位小数");
             return;
         }
 

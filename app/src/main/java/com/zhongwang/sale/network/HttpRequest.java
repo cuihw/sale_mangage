@@ -1,6 +1,7 @@
 package com.zhongwang.sale.network;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,6 +14,7 @@ import com.lzy.okgo.model.Response;
 import com.zhongwang.sale.App;
 import com.zhongwang.sale.module.Bean;
 import com.zhongwang.sale.module.DayStatisticBean;
+import com.zhongwang.sale.utils.HwLog;
 
 import org.json.JSONObject;
 
@@ -62,19 +64,8 @@ public class HttpRequest {
         void onResponse(int status, T bean);
     }
 
-    static public abstract class RespListener<T> implements ResponseListener<T> {
-        private Class<T> clazz;
-        public RespListener() {
-            ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
-            this.clazz = (Class<T>) type.getActualTypeArguments()[0];
-        }
-        public Class<T> getClazz() {
-            return clazz;
-        }
-    }
-
-    public static <T> void postData(String url, Map<String, Object> params, final RespListener listener){
-        postData(null, url,params,listener);
+    public static <T> void postData(String url, Map<String, Object> params, final RespListener listener) {
+        postData(null, url, params, listener);
     }
 
     public static <T> void postData(final Context context, String url, Map<String, Object> params, final RespListener listener) {
@@ -86,39 +77,66 @@ public class HttpRequest {
         String clz = null;
         if (context != null) {
             clz = context.getClass().getSimpleName();
+            HwLog.i(TAG, "set the class name as tag clz = " + clz);
         }
         OkGo.<String>post(url).tag(clz)
                 //.headers("SessionKey", CacheData.SessionKey)
                 .headers("platform", "Android")
                 .params("params", jsonObject.toString())
                 .execute(new HStringCallback(context) {
-            @Override
-            public void onSuccess(Response<String> response) {
-                String body = response.body();
-                Bean base = new Gson().fromJson(body, Bean.class);
-                try {
-                    Class<T> clz = listener.getClazz();
-                    if (clz != String.class) {
-                        if (clz == DayStatisticBean.class) {
-                            if (body.contains("\"data\":{") || body.contains("\"data\":null")) {
-                                DayStatisticBean data = new DayStatisticBean();
-                                data.setCode(base.getCode());
-                                data.setMessage(base.getMessage());
-                                listener.onResponse(0, data);
-                                return;
-                            }
+                    String body = null;
+
+                    @Override
+                    public void onFinish() {
+                        super.onFinish();
+                        if (TextUtils.isEmpty(body)) {
+                            listener.onResponse(1, null);
                         }
-                        T data = new Gson().fromJson(body, clz);
-                        listener.onResponse(0, data);
-                    } else  {
-                        listener.onResponse(0, body);
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    listener.onResponse(0, null);
-                }
-            }
-        });
+
+                    @Override
+                    public void onSuccess(Response<String> response) {
+                        body = response.body();
+                        try {
+
+
+                            Class<T> clz = listener.getClazz();
+                            if (clz != String.class) {
+                                if (clz == DayStatisticBean.class) {
+                                    if (body.contains("\"data\":{") || body.contains("\"data\":null")) {
+                                        DayStatisticBean data = new DayStatisticBean();
+                                        Bean base = new Gson().fromJson(body, Bean.class);
+
+                                        data.setCode(base.getCode());
+                                        data.setMessage(base.getMessage());
+                                        listener.onResponse(0, data);
+                                        return;
+                                    }
+                                }
+                                T data = new Gson().fromJson(body, clz);
+                                listener.onResponse(0, data);
+                            } else {
+                                listener.onResponse(0, body);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            listener.onResponse(1, null);
+                        }
+                    }
+                });
+    }
+
+    static public abstract class RespListener<T> implements ResponseListener<T> {
+        private Class<T> clazz;
+
+        public RespListener() {
+            ParameterizedType type = (ParameterizedType) this.getClass().getGenericSuperclass();
+            this.clazz = (Class<T>) type.getActualTypeArguments()[0];
+        }
+
+        public Class<T> getClazz() {
+            return clazz;
+        }
     }
 
     public static void cancleRequest(final Context context) {

@@ -320,18 +320,18 @@ public class FragmentDayStatistic extends FragmentBase {
         @Override
         public void onUpdate(BaseAdapterHelper helper, DayStatisticBean.DayStatisticsData item, int position) {
             helper.setText(R.id.data_tv, item.getUp_date() + "（负责人： " + item.getUname() + "）");
-            helper.setText(R.id.number2, "" + item.getOut_number()); // 出货数量
-            helper.setText(R.id.number3, "" + item.getPrice());  // 价格
-            helper.setText(R.id.number, "" + item.getRmoney()); // 回款金额
+            helper.setText(R.id.number2, item.getOut_number()); // 出货数量
+            helper.setText(R.id.number3, item.getPrice());  // 价格
+            helper.setText(R.id.number, item.getRmoney()); // 回款金额
             helper.setText(R.id.number12, item.getRemark()); // 备注
-            helper.setText(R.id.number4, "" + item.getBilling_number()); // 开票数量
-            helper.setText(R.id.number5, "" + item.getBilling_price()); // 开票价格
+            helper.setText(R.id.number4, item.getBilling_number()); // 开票数量
+            helper.setText(R.id.number5, item.getBilling_price()); // 开票价格
 
             if (item.isJiaQi()) {
-                helper.setText(R.id.number1, "" + item.getDsend()); // 当日发出托盘
-                helper.setText(R.id.number13, "" + item.getDrecycling()); // 当日回收托盘
+                helper.setText(R.id.number1, item.getDsend()); // 当日发出托盘
+                helper.setText(R.id.number13, item.getDrecycling()); // 当日回收托盘
                 helper.setText(R.id.number14, "" + item.getDresidue()); // 当日剩余托盘
-                helper.setText(R.id.number6, "" + item.getDmoney()); // 当日金额
+                helper.setText(R.id.number6, item.getDmoney()); // 当日金额
                 helper.setText(R.id.number7, "" + item.getDbalance()); // 当日余款
                 helper.setText(R.id.number8, "" + item.getDmoney2()); // 当日发生金额
             } else {

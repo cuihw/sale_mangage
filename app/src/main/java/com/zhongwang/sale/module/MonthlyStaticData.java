@@ -17,7 +17,7 @@ public class MonthlyStaticData {
 
     private int dresidue;
 
-    private int dbalance;
+    private float dbalance;
 
     private String wname;
 
@@ -25,7 +25,7 @@ public class MonthlyStaticData {
 
     private String report_money;
 
-    private int dmoney2;
+    private float dmoney2;
 
     private String init_money;
 
@@ -111,7 +111,7 @@ public class MonthlyStaticData {
         this.dresidue = dresidue;
     }
 
-    public int getDbalance() {
+    public float getDbalance() {
         return dbalance;
     }
 
@@ -143,7 +143,7 @@ public class MonthlyStaticData {
         this.report_money = report_money;
     }
 
-    public int getDmoney2() {
+    public float getDmoney2() {
         return dmoney2;
     }
 
