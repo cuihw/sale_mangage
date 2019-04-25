@@ -37,11 +37,11 @@ public class DayStatisticBean extends Bean {
 
         private String dmoney;
 
-        private int dbalance;
+        private float dbalance;
 
         private String uname;
 
-        private int dmoney2;
+        private float dmoney2;
 
         private String report_square;
 
@@ -171,7 +171,7 @@ public class DayStatisticBean extends Bean {
             this.dmoney = dmoney;
         }
 
-        public int getDbalance() {
+        public float getDbalance() {
             return dbalance;
         }
 
@@ -187,7 +187,7 @@ public class DayStatisticBean extends Bean {
             this.uname = uname;
         }
 
-        public int getDmoney2() {
+        public float getDmoney2() {
             return dmoney2;
         }
 

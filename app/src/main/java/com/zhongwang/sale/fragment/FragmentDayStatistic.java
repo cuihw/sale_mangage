@@ -267,10 +267,7 @@ public class FragmentDayStatistic extends FragmentBase {
                 if (getContext() == null) return;
                 if (bean.getCode() == Constants.SUCCEED_CODE) {
                     handleDayBean(bean);
-
-
                 } else {
-
                     ToastUtil.showTextToast(getContext(), bean.getMessage());
                 }
             }

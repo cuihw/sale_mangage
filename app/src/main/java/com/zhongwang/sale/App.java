@@ -3,6 +3,7 @@ package com.zhongwang.sale;
 import android.app.Application;
 import android.util.Log;
 
+import com.tencent.bugly.crashreport.CrashReport;
 import com.zhongwang.sale.network.HttpRequest;
 
 public class App extends Application {
@@ -20,6 +21,7 @@ public class App extends Application {
         super.onCreate();
         instence = this;
         initOkgo();
+        CrashReport.initCrashReport(this, "注册时申请的APPID", false);
     }
 
     private void initOkgo() {
