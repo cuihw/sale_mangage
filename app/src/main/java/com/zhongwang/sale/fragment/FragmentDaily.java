@@ -504,9 +504,6 @@ public class FragmentDaily extends FragmentBase {
             if (!TextUtils.isEmpty(backTrayNumber)) {
                 params.put("drecycling", backTrayNumber);
             }
-//            if (!TextUtils.isEmpty(reportSquare)) {
-//                params.put("report_square", reportSquare);
-//            }
         } else {
             postUrl = Constants.SALES_UPDATE_STANDARD;
         }
@@ -521,7 +518,6 @@ public class FragmentDaily extends FragmentBase {
         } else {
             params.put("billing_price", unitPrice);
             bill_price.setText(unitPrice + "");
-            return;
         }
 
         commit_action.setClickable(false);
@@ -530,7 +526,6 @@ public class FragmentDaily extends FragmentBase {
             public void onResponse(int status, UpdateDataBean bean) {
                 HwLog.i(TAG, bean.getMessage() + ", bean = " + bean.toJson());
                 handleUpdata(bean, type);
-
                 commit_action.setClickable(true);
             }
         });
