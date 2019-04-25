@@ -36,15 +36,27 @@ public class UtilsTest {
     @Test
     public void transform2Decimal() {
         String t = Utils.transform2Decimal("333");
-        System.out.println("t = " + t);
+        System.out.println("333 t = " + t);
 
         t = Utils.transform2Decimal("333.2222");
-        System.out.println("t = " + t);
+        System.out.println("333.2222 t = " + t);
 
         t = Utils.transform2Decimal("333.2");
-        System.out.println("t = " + t);
+        System.out.println("333.2 t = " + t);
 
         t = Utils.transform2Decimal("333.");
-        System.out.println("t = " + t);
+        System.out.println("333. t = " + t);
+
+        t = Utils.transform2Decimal(null);
+        System.out.println("null t = " + t);
+
+        t = Utils.transform2Decimal("    ");
+        System.out.println("    t = " + t);
+
+        t = Utils.transform2Decimal("fdsa ");
+        System.out.println("fdsa t = " + t);
+
+        t = Utils.transform2Decimal("中国汉字");
+        System.out.println("中国汉字 t = " + t);
     }
 }

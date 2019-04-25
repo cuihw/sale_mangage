@@ -1,7 +1,5 @@
 package com.zhongwang.sale.utils;
 
-import android.text.TextUtils;
-
 public class Utils {
 
 
@@ -16,9 +14,8 @@ public class Utils {
         return true;
     }
 
-
     public static String transform2Decimal(String priceString) {
-        if (TextUtils.isEmpty(priceString)) return "0.00";
+        if (isEmpty(priceString)) return "0.00";
 
         try {
             Float v = Float.parseFloat(priceString);
@@ -28,4 +25,7 @@ public class Utils {
         }
     }
 
+    public static boolean isEmpty(String cs) {
+        return cs == null || cs.trim().length() == 0;
+    }
 }
