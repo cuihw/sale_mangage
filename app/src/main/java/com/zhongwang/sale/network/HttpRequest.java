@@ -14,6 +14,7 @@ import com.lzy.okgo.model.Response;
 import com.zhongwang.sale.App;
 import com.zhongwang.sale.module.Bean;
 import com.zhongwang.sale.module.DayStatisticBean;
+import com.zhongwang.sale.module.LoginResult;
 import com.zhongwang.sale.utils.HwLog;
 
 import org.json.JSONObject;
@@ -107,6 +108,16 @@ public class HttpRequest {
                                         DayStatisticBean data = new DayStatisticBean();
                                         Bean base = new Gson().fromJson(body, Bean.class);
 
+                                        data.setCode(base.getCode());
+                                        data.setMessage(base.getMessage());
+                                        listener.onResponse(0, data);
+                                        return;
+                                    }
+                                }
+                                if (clz == LoginResult.class) {
+                                    if (body.contains("\"data\":[")) {
+                                        LoginResult data = new LoginResult();
+                                        Bean base = new Gson().fromJson(body, Bean.class);
                                         data.setCode(base.getCode());
                                         data.setMessage(base.getMessage());
                                         listener.onResponse(0, data);

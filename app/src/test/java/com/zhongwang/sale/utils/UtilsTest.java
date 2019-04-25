@@ -10,12 +10,12 @@ public class UtilsTest {
         String price = "12.22";
         boolean b = Utils.checkPrice(price);
         System.out.println("b = " + b);
-        Assert.assertEquals(true, b);
+        Assert.assertTrue(b);
 
         price = "12.220";
         b = Utils.checkPrice(price);
         System.out.println("b = " + b);
-        Assert.assertEquals(false, b);
+        Assert.assertFalse(b);
 
         price = "12.2";
         b = Utils.checkPrice(price);

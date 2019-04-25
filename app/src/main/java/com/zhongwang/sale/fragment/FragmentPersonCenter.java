@@ -152,6 +152,10 @@ public class FragmentPersonCenter extends FragmentBase {
         check_version_layout.setOnClickListener(v -> {
             checkVersion();
         });
+
+        add_ground.setOnClickListener(v -> {
+            showInitDataDialog();
+        });
     }
 
     private void initView() {
@@ -198,9 +202,6 @@ public class FragmentPersonCenter extends FragmentBase {
         };
         listview.setAdapter(adapter);
 
-        add_ground.setOnClickListener(v -> {
-            showInitDataDialog();
-        });
     }
 
     private void showInitDataDialog() {
