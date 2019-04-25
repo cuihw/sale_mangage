@@ -32,6 +32,7 @@ import com.zhongwang.sale.utils.HwLog;
 import com.zhongwang.sale.utils.PackageUtils;
 import com.zhongwang.sale.utils.PreferencesUtils;
 import com.zhongwang.sale.utils.ToastUtil;
+import com.zhongwang.sale.utils.Utils;
 
 import org.json.JSONObject;
 
@@ -243,7 +244,7 @@ public class FragmentPersonCenter extends FragmentBase {
 
         Map<String, Object> params = new HashMap<>();
 
-        priceString = transform2Decimal(priceString);
+        priceString = Utils.transform2Decimal(priceString);
 
         params.put("name", nameString);
         params.put("contract_price", priceString);

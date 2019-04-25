@@ -32,4 +32,19 @@ public class UtilsTest {
         System.out.println("b = " + b);
         Assert.assertEquals(true, b);
     }
+
+    @Test
+    public void transform2Decimal() {
+        String t = Utils.transform2Decimal("333");
+        System.out.println("t = " + t);
+
+        t = Utils.transform2Decimal("333.2222");
+        System.out.println("t = " + t);
+
+        t = Utils.transform2Decimal("333.2");
+        System.out.println("t = " + t);
+
+        t = Utils.transform2Decimal("333.");
+        System.out.println("t = " + t);
+    }
 }

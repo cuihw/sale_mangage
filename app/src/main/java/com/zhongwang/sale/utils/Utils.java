@@ -1,5 +1,7 @@
 package com.zhongwang.sale.utils;
 
+import android.text.TextUtils;
+
 public class Utils {
 
 
@@ -13,4 +15,17 @@ public class Utils {
         }
         return true;
     }
+
+
+    public static String transform2Decimal(String priceString) {
+        if (TextUtils.isEmpty(priceString)) return "0.00";
+
+        try {
+            Float v = Float.parseFloat(priceString);
+            return String.format("%1.2f", v);
+        } catch (Exception e) {
+            return "0.00";
+        }
+    }
+
 }
