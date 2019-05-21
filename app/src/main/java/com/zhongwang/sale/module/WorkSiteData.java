@@ -4,6 +4,15 @@ public class WorkSiteData {
     private String id;
     private String name;
     private String contract_price;
+    private String norm_price;
+
+    public String getNorm_price() {
+        return norm_price;
+    }
+
+    public void setNorm_price(String norm_price) {
+        this.norm_price = norm_price;
+    }
 
     public String getName() {
         return name;

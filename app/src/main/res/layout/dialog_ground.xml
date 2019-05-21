@@ -50,17 +50,30 @@
         </TableRow>
 
         <TableRow>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="合同价格：" />
+                android:text="加气合同价：" />
 
             <EditText
                 android:id="@+id/price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="(单位：元)请输入合同价格"
+                android:hint="(单位：元)请输入加气合同价格"
+                android:inputType="numberDecimal" />
+        </TableRow>
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标砖合同价：" />
+
+            <EditText
+                android:id="@+id/price2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="(单位：元)请输入标砖合同价格"
                 android:inputType="numberDecimal" />
         </TableRow>
     </TableLayout>

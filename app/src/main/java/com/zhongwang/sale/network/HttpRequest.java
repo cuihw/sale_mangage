@@ -18,6 +18,7 @@ import com.zhongwang.sale.module.LoginResult;
 import com.zhongwang.sale.utils.HwLog;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
@@ -66,21 +67,34 @@ public class HttpRequest {
     }
 
     public static <T> void postData(String url, Map<String, Object> params, final RespListener listener) {
-        postData(null, url, params, listener);
+        postData(null, null, url, params, listener);
     }
 
-    public static <T> void postData(final Context context, String url, Map<String, Object> params, final RespListener listener) {
+    public static <T> void postData(String tag, String url, Map<String, Object> params, final RespListener listener) {
+        postData(null,tag, url, params, listener);
+    }
+
+    public static <T> void postData(final Context context, String url, Map<String, Object> params, final RespListener listener){
+        postData(context,null, url, params, listener);
+    }
+
+    public static <T> void postData(final Context context, String tag, String url, Map<String, Object> params, final RespListener listener) {
         if (params == null) {
             params = new HashMap<>();
         }
         JSONObject jsonObject = new JSONObject(params);
         Log.i(TAG, "params:" + jsonObject.toString());
-        String clz = null;
-        if (context != null) {
-            clz = context.getClass().getSimpleName();
-            HwLog.i(TAG, "set the class name as tag clz = " + clz);
+
+        if (TextUtils.isEmpty(tag)) {
+            String clz = null;
+            if (context != null) {
+                clz = context.getClass().getSimpleName();
+                HwLog.i(TAG, "set the class name as tag clz = " + clz);
+            }
+            tag = clz;
         }
-        OkGo.<String>post(url).tag(clz)
+
+        OkGo.<String>post(url).tag(tag)
                 //.headers("SessionKey", CacheData.SessionKey)
                 .headers("platform", "Android")
                 .params("params", jsonObject.toString())

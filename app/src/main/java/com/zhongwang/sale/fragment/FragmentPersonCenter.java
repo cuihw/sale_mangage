@@ -133,22 +133,7 @@ public class FragmentPersonCenter extends FragmentBase {
     }
 
     private void initListener() {
-        logout.setOnClickListener(v -> {
-            String s = logout.getText().toString();
-            if (s.equals("退出登录")) {
-                // 退出登录
-                logout.setText("登    录");
-                LoginResult.clearLoginData(getContext());
-                // 用户名设置为空，
-                name.setText("用户未登录");
-                // 工地信息清空
-                if (adapter != null) adapter.replaceAll(new ArrayList<>());
-            } else {
-                logout.setText("退出登录");
-                LoginActivity.startActivity(getContext(), null);
-            }
-
-        });
+        logout.setOnClickListener(v -> logoutAction());
 
         check_version_layout.setOnClickListener(v -> {
             checkVersion();
@@ -157,6 +142,24 @@ public class FragmentPersonCenter extends FragmentBase {
         add_ground.setOnClickListener(v -> {
             showInitDataDialog();
         });
+    }
+
+    private void logoutAction(){
+
+        String s = logout.getText().toString();
+        if (s.equals("退出登录")) {
+            // 退出登录
+            logout.setText("登    录");
+            LoginResult.clearLoginData(getContext());
+            // 用户名设置为空，
+            name.setText("用户未登录");
+            // 工地信息清空
+            if (adapter != null) adapter.replaceAll(new ArrayList<>());
+        } else {
+            logout.setText("退出登录");
+            LoginActivity.startActivity(getContext(), null);
+        }
+
     }
 
     private void initView() {
@@ -179,6 +182,8 @@ public class FragmentPersonCenter extends FragmentBase {
         intent.setData(Uri.parse(url)); // Url 就是你要打开的网址
         intent.setAction(Intent.ACTION_VIEW);
         getActivity().startActivity(intent); //启动浏览器
+        logoutAction();
+        getActivity().finish();
     }
 
     private void initListview() {
@@ -198,11 +203,17 @@ public class FragmentPersonCenter extends FragmentBase {
             @Override
             public void onUpdate(BaseAdapterHelper helper, WorkSiteData item, int position) {
                 helper.setText(R.id.wid, "工地名字:" + item.getName());
-                helper.setText(R.id.wname, "合同价:" + item.getContract_price());
+                helper.setText(R.id.wname, "加气:" + item.getContract_price());
+                String norm_price = item.getNorm_price();
+                if (TextUtils.isEmpty(norm_price)) {
+                    helper.setText(R.id.wname2, "标砖:0");
+                } else {
+                    helper.setText(R.id.wname2, "标砖:" + norm_price);
+                }
+
             }
         };
         listview.setAdapter(adapter);
-
     }
 
     private void showInitDataDialog() {
@@ -212,6 +223,7 @@ public class FragmentPersonCenter extends FragmentBase {
         // 获取布局中的控件
         final EditText name = view2.findViewById(R.id.name);
         final EditText price = view2.findViewById(R.id.price);
+        final EditText  price2  = view2.findViewById(R.id.price2);
         final TextView cancel = view2.findViewById(R.id.common_dialog_cancel_tv);
         final TextView confirm = view2.findViewById(R.id.common_dialog_confirm_tv);
         final TextView title = view2.findViewById(R.id.common_dialog_title_tv);
@@ -231,12 +243,14 @@ public class FragmentPersonCenter extends FragmentBase {
         confirm.setOnClickListener(v -> {
             String nameString = name.getText().toString();
             String priceString = price.getText().toString();
-            uploadWorkSiteData(nameString, priceString);
+            String norm_price = price2.getText().toString();
+
+            uploadWorkSiteData(nameString, priceString, norm_price);
         });
         addGroundDialog.show();
     }
 
-    private synchronized void uploadWorkSiteData(String nameString, String priceString) {
+    private synchronized void uploadWorkSiteData(String nameString, String priceString, String norm_price) {
         if (TextUtils.isEmpty(nameString)) {
             ToastUtil.showTextToast(getContext(), "必须填写名字");
             return;
@@ -245,9 +259,11 @@ public class FragmentPersonCenter extends FragmentBase {
         Map<String, Object> params = new HashMap<>();
 
         priceString = Utils.transform2Decimal(priceString);
+        norm_price = Utils.transform2Decimal(norm_price);
 
         params.put("name", nameString);
         params.put("contract_price", priceString);
+        params.put("norm_price", norm_price);
         params.put("uid", loginResult.getData().getInfo().getId());
 
         JSONObject jsonObject = new JSONObject(params);
@@ -276,21 +292,6 @@ public class FragmentPersonCenter extends FragmentBase {
                 }
             }
         });
-    }
-
-    private String transform2Decimal(String priceString) {
-        if (!priceString.contains(".")) {
-            return priceString + ".00";
-        } else {
-            int end = priceString.lastIndexOf(".");
-            int length = priceString.length();
-            if (end == length - 1) {
-                return priceString + "00";
-            } else if (end == length - 2) {
-                return priceString + "0";
-            }
-        }
-        return priceString;
     }
 
     private void handleWorkSite(WorkSiteData data) {

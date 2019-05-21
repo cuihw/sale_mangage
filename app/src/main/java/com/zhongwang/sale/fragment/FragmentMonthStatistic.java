@@ -58,7 +58,6 @@ public class FragmentMonthStatistic extends FragmentBase {
     @BindView(R.id.spinner)
     Spinner spinner;
 
-
     @BindView(R.id.listview)
     ListView listview;
     LoginResult loginData;
@@ -232,8 +231,6 @@ public class FragmentMonthStatistic extends FragmentBase {
             return;
         }
         multiAdapter.replaceAll(data);
-
-
     }
 
     private void initData() {

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:gravity="center_vertical"
     android:padding="@dimen/item_padding">
 
     <TextView
@@ -13,10 +14,23 @@
         android:text="工地名称：test" />
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:text="合同价格" />
+    <TextView
         android:id="@+id/wname"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="5"
+        android:layout_weight="3"
         android:gravity="center"
-        android:text="合同价格：112" />
+        android:text=" 加气：112" />
+    <TextView
+        android:id="@+id/wname2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:text="标砖：112" />
 </LinearLayout>

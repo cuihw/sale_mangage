@@ -101,12 +101,13 @@
                         android:paddingRight="@dimen/item_padding"
                         android:text="数量：" />
 
+                    <!--小数点后三位小数-->
                     <EditText
                         android:id="@+id/number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:hint="（必填）请输入数量"
-                        android:inputType="number" />
+                        android:inputType="numberDecimal" />
                 </TableRow>
 
                 <TableRow>

@@ -198,6 +198,7 @@ public class FragmentDaily extends FragmentBase {
                 if (groundData != null) {
                     HwLog.i(TAG, "groundData name = " + groundData.getName() + ", id = " + groundData.getId());
                     getInitDataMonth(calendar);
+                    price.setText(groundData.getContract_price());
                 }
             }
 
@@ -226,25 +227,35 @@ public class FragmentDaily extends FragmentBase {
     }
 
     private void setUiByType(int type) {
+        price.setText("");
         if (type == JIA_QI) {
             row_tray0.setVisibility(View.VISIBLE);
             row_tray1.setVisibility(View.VISIBLE);
             row_left_tray.setVisibility(View.VISIBLE);
             row_money.setVisibility(View.VISIBLE);
             row_happen.setVisibility(View.VISIBLE);
-//            row_square.setVisibility(View.VISIBLE);
 
+            if (groundData != null)  {
+                String contract_price = groundData.getContract_price();
+                if (!TextUtils.isEmpty(contract_price)) {
+                    price.setText(contract_price);
+                }
+            }
         } else {
             row_tray0.setVisibility(View.GONE);
             row_tray1.setVisibility(View.GONE);
             row_left_tray.setVisibility(View.GONE);
             row_money.setVisibility(View.GONE);
             row_happen.setVisibility(View.GONE);
-//            row_square.setVisibility(View.GONE);
+            if (groundData != null){
+                String norm_price = groundData.getNorm_price();
+                if (!TextUtils.isEmpty(norm_price)) {
+                    price.setText(norm_price);
+                }
+            }
         }
         ready_commit.setVisibility(View.GONE);
         number.setText("");
-        price.setText("");
         bill_number.setText("");
         bill_price.setText("");
         backmoney.setText("");
@@ -256,6 +267,7 @@ public class FragmentDaily extends FragmentBase {
         balance_money.setText("0.0");
         current_happen.setText("0.0");
         //report_square.setText("");
+
     }
 
     private void hideSoftKeyboard() {
@@ -351,7 +363,7 @@ public class FragmentDaily extends FragmentBase {
         params.put("wid", groundData.getId());
         params.put("on_time", month);
 
-        HttpRequest.postData(null, Constants.REQUEST_INIT_DATA, params,
+        HttpRequest.postData(TAG, Constants.REQUEST_INIT_DATA, params,
                 new HttpRequest.RespListener<InitDataBean>() {
                     @Override
                     public void onResponse(int status, InitDataBean bean) {
@@ -363,6 +375,7 @@ public class FragmentDaily extends FragmentBase {
                         }
                     }
                 });
+
     }
 
     private void showInitData(InitDataBean initDataBean) {
@@ -479,7 +492,7 @@ public class FragmentDaily extends FragmentBase {
             return;
         }
 
-        if (!Utils.checkPrice(unitPrice)) {
+        if (!Utils.checkPrice(unitPrice,2)) {
             alertMessage("单价小数点后最多两位小数");
             return;
         }
@@ -521,7 +534,7 @@ public class FragmentDaily extends FragmentBase {
             return;
         }
         if (!TextUtils.isEmpty(billPrice)) {
-            if (!Utils.checkPrice(billPrice)) {
+            if (!Utils.checkPrice(billPrice,2)) {
                 alertMessage("开票单价小数点后不能大于两位小数");
                 return;
             }
@@ -653,6 +666,8 @@ public class FragmentDaily extends FragmentBase {
         if (datas.size() == 1) {
             spinerItems.add(datas.get(0).getName());
             groundData = datas.get(0);
+            String contract_price = groundData.getContract_price();
+            price.setText(contract_price);
         } else {
             spinerItems.add("请选择工地");
             for (WorkSiteData data : datas) {
@@ -664,5 +679,11 @@ public class FragmentDaily extends FragmentBase {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // 加载适配器
         spinner.setAdapter(adapter);
+    }
+
+    @Override
+    public void onDestroy() {
+        HttpRequest.cancleRequest(TAG);
+        super.onDestroy();
     }
 }
