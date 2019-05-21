@@ -7,9 +7,12 @@ public class Constants {
 
     private static final String HOST_RELEASE = "http://218.28.225.140";
     private static final String HOST_DEBUG = "http://192.168.1.253";
-    public static final String UPDATE_INFO = HOST_RELEASE + "/zwjxgj/app/appInfo.json";
-    public static final String UPDATE_URL = HOST_RELEASE + "/zwjxgj/app/建销管家.apk";
-    private static final String BASE_URL = HOST_RELEASE + "/zwjxgj/index.php/app/";
+
+    private static final String HOST = HOST_DEBUG;
+
+    public static final String UPDATE_INFO = HOST + "/zwjxgj/app/appInfo.json";
+    public static final String UPDATE_URL = HOST + "/zwjxgj/app/建销管家.apk";
+    private static final String BASE_URL = HOST + "/zwjxgj/index.php/app/";
 
     // ==============================================
     public static final String ADD_GROUND = BASE_URL + "Warehouse/doAddWareHouse";  // 增加工地信息。
