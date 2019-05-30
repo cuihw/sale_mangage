@@ -312,7 +312,6 @@ public class FragmentDaily extends FragmentBase {
         ToastUtil.showTextToast(getContext(), s);
     }
 
-
     private void showDatePicker() {
         DatePickerDialog datePicker = new DatePickerDialog(new ContextThemeWrapper(getActivity(),
                 android.R.style.Theme_Holo_Light_Dialog_NoActionBar),
@@ -357,7 +356,6 @@ public class FragmentDaily extends FragmentBase {
                 showInitData(this.initDataBean);
             }
         }
-
 
         Map<String, Object> params = new HashMap<>();
         params.put("wid", groundData.getId());
@@ -617,7 +615,7 @@ public class FragmentDaily extends FragmentBase {
                     saveInitData(initDataBean);
                     initDataAlertDialog.dismiss();
                     initDataAlertDialog = null;
-                    ToastUtil.showTextToast(getContext(), "数据上传成功。");
+                    ToastUtil.showTextToast(getContext(), "数据上报成功。");
                 } else {
                     ToastUtil.showTextToast(getContext(), bean.getMessage());
                 }

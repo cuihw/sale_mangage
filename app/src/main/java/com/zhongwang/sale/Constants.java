@@ -11,7 +11,7 @@ public class Constants {
     private static final String HOST = HOST_DEBUG;
 
     public static final String UPDATE_INFO = HOST + "/zwjxgj/app/appInfo.json";
-    public static final String UPDATE_URL = HOST + "/zwjxgj/app/建销管家.apk";
+    public static final String UPDATE_URL = HOST + "/zwjxgj/app/app.apk";
     private static final String BASE_URL = HOST + "/zwjxgj/index.php/app/";
 
     // ==============================================

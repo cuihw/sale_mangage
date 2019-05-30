@@ -112,7 +112,7 @@ public class FragmentPersonCenter extends FragmentBase {
 
     private void handleCheckVersion(CheckVersionInfo checkVersionInfo) {
         if (getContext() == null) return;
-        if (PackageUtils.getVersionCode(getContext()) < checkVersionInfo.getCode()) {
+        if (PackageUtils.getVersionCode(getContext()) < checkVersionInfo.getVersionCode()) {
             PopupDialog.create(getContext(), "发现新版本", "更新内容：" + checkVersionInfo.getVersionInfo()
                             + "\n 点击开始下载",
                     "下载", new View.OnClickListener() {
@@ -163,6 +163,8 @@ public class FragmentPersonCenter extends FragmentBase {
     }
 
     private void initView() {
+        version.setText("当前版本： " + PackageUtils.getVersionName(getContext()));
+
         loginResult = LoginResult.getLoginDataFromPreference(getContext());
         if (loginResult == null) {
 //          LoginActivity.startActivity(getContext(), null);
@@ -173,8 +175,6 @@ public class FragmentPersonCenter extends FragmentBase {
         }
         name.setText("用户名：" + loginResult.getData().getInfo().getName());
         initListview();
-
-        version.setText("当前版本： " + PackageUtils.getVersionName(getContext()));
     }
 
     private void downloadApkUrl(String url) {
@@ -182,8 +182,8 @@ public class FragmentPersonCenter extends FragmentBase {
         intent.setData(Uri.parse(url)); // Url 就是你要打开的网址
         intent.setAction(Intent.ACTION_VIEW);
         getActivity().startActivity(intent); //启动浏览器
-        logoutAction();
-        getActivity().finish();
+        // logoutAction();
+        // getActivity().finish();
     }
 
     private void initListview() {

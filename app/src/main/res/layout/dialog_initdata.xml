@@ -44,11 +44,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请输入初期数"
-                android:inputType="number" />
+                android:inputType="numberSigned|numberDecimal" />
         </TableRow>
 
         <TableRow>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="请输入托盘数"
-                android:inputType="number" />
+                android:inputType="numberSigned|numberDecimal" />
         </TableRow>
     </TableLayout>
 
